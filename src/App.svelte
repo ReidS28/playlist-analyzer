@@ -1,89 +1,93 @@
 <script>
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from './assets/vite.svg'
-  import heroImg from './assets/hero.png'
-  import Counter from './lib/Counter.svelte'
+	import Playlist from "./componets/Playlist.svelte";
+	import Song from "./componets/Song.svelte";
 </script>
 
-<section id="center">
-  <div class="hero">
-    <img src={heroImg} class="base" width="170" height="179" alt="" />
-    <img src={svelteLogo} class="framework" alt="Svelte logo" />
-    <img src={viteLogo} class="vite" alt="Vite logo" />
-  </div>
-  <div>
-    <h1>Get started</h1>
-    <p>Edit <code>src/App.svelte</code> and save to test <code>HMR</code></p>
-  </div>
-  <Counter />
-</section>
-
-<div class="ticks"></div>
-
-<section id="next-steps">
-  <div id="docs">
-    <svg class="icon" role="presentation" aria-hidden="true">
-      <use href="/icons.svg#documentation-icon"></use>
-    </svg>
-    <h2>Documentation</h2>
-    <p>Your questions, answered</p>
-    <ul>
-      <li>
-        <a href="https://vite.dev/" target="_blank" rel="noreferrer">
-          <img class="logo" src={viteLogo} alt="" />
-          Explore Vite
-        </a>
-      </li>
-      <li>
-        <a href="https://svelte.dev/" target="_blank" rel="noreferrer">
-          <img class="button-icon" src={svelteLogo} alt="" />
-          Learn more
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="social">
-    <svg class="icon" role="presentation" aria-hidden="true">
-      <use href="/icons.svg#social-icon"></use>
-    </svg>
-    <h2>Connect with us</h2>
-    <p>Join the Vite community</p>
-    <ul>
-      <li>
-        <a href="https://github.com/vitejs/vite" target="_blank" rel="noreferrer">
-          <svg class="button-icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#github-icon"></use>
-          </svg>
-          GitHub
-        </a>
-      </li>
-      <li>
-        <a href="https://chat.vite.dev/" target="_blank" rel="noreferrer">
-          <svg class="button-icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#discord-icon"></use>
-          </svg>
-          Discord
-        </a>
-      </li>
-      <li>
-        <a href="https://x.com/vite_js" target="_blank" rel="noreferrer">
-          <svg class="button-icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#x-icon"></use>
-          </svg>
-          X.com
-        </a>
-      </li>
-      <li>
-        <a href="https://bsky.app/profile/vite.dev" target="_blank" rel="noreferrer">
-          <svg class="button-icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#bluesky-icon"></use>
-          </svg>
-          Bluesky
-        </a>
-      </li>
-    </ul>
-  </div>
-</section>
-
-<div class="ticks"></div>
-<section id="spacer"></section>
+<div class="playlist-container flex items-center justify-center">
+	<Playlist class="max-w-xl max-h-[90vh]">
+		<Song
+			track="AP United States History Exam"
+			artist="Gym"
+		></Song>
+		<Song
+			track="Midnight City Lights"
+			artist="Neon Dreams"
+		></Song>
+		<Song
+			track="Echoes of Yesterday"
+			artist="Silver Horizon"
+		></Song>
+		<Song
+			track="Runaway Satellites"
+			artist="Static Bloom"
+		></Song>
+		<Song
+			track="Velvet Summer"
+			artist="Luna Avenue"
+		></Song>
+		<Song
+			track="Broken Polaroids"
+			artist="The Glass Hearts"
+		></Song>
+		<Song
+			track="Coffee Shop Rain"
+			artist="Maple Street"
+		></Song>
+		<Song
+			track="Digital Paradise"
+			artist="Pixel Tide"
+		></Song>
+		<Song
+			track="Golden Hour Drive"
+			artist="Sunset Arcade"
+		></Song>
+		<Song
+			track="Paper Airplanes"
+			artist="Northbound Kids"
+		></Song>
+		<Song
+			track="Electric Romance"
+			artist="Crimson Stereo"
+		></Song>
+		<Song
+			track="Fire Escape Dreams"
+			artist="Downtown Echo"
+		></Song>
+		<Song
+			track="Parallel Hearts"
+			artist="Nova Theory"
+		></Song>
+		<Song
+			track="Clouds Over California"
+			artist="Westview"
+		></Song>
+		<Song
+			track="Dancing Through Static"
+			artist="Signal Fade"
+		></Song>
+		<Song
+			track="Last Train Home"
+			artist="City Lines"
+		></Song>
+		<Song
+			track="Moonlight on Vinyl"
+			artist="Blue Magnolia"
+		></Song>
+		<Song
+			track="Wildflower Nights"
+			artist="Amber Coast"
+		></Song>
+		<Song
+			track="Gravity Between Us"
+			artist="Orchid Avenue"
+		></Song>
+		<Song
+			track="Synthetic Memories"
+			artist="Chrome Youth"
+		></Song>
+		<Song
+			track="Chasing Daybreak"
+			artist="Harbor Lights"
+		></Song>
+	</Playlist>
+</div>
