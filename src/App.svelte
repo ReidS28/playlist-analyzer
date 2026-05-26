@@ -11,7 +11,7 @@
 
 	onMount(async () => {
 		playlists = await getUserPlaylists();
-		//console.log($state.snapshot(playlists));
+		console.log($state.snapshot(playlists));
 	});
 </script>
 
@@ -25,6 +25,6 @@
 
 	<ScrollingPlaylist
 		data={playlists[5]}
-		class="max-w-xl max-h-[90vh]">Remove this requirement</ScrollingPlaylist
+		class="max-w-xl max-h-[90vh]"></ScrollingPlaylist
 	>
 </div>

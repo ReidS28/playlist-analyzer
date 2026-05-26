@@ -1,13 +1,33 @@
 @import "tailwindcss";
 
 @theme {
-    --color-sp-green: #1ED760;
-	--color-sp-white: #FFFFFF;
-    --color-sp-black: #121212;
+	--color-sp-green: #1ed760;
+	--color-sp-white: #ffffff;
+	--color-sp-black: #121212;
 }
 
 @layer base {
 	body {
 		@apply bg-sp-black text-slate-100 font-sans;
+	}
+}
+
+@layer componets {
+	.primaryText {
+		font-weight: 600;
+		color: #ffffff;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.secondaryText {
+		font-size: 1.25rem;
+		line-height: 1.75rem;
+		color: #d1d5db;
+		font-weight: 500;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 }

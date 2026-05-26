@@ -1,19 +1,16 @@
 <script>
 	import coldSpaceImg from "../assets/covers/Cold Space.png";
-	let { title, artist, cover_src = "" ,class: className = "" } = $props();
-
-	const trackStyle = "text-xl font-semibold text-white truncate";
-	const artistStyle = "text-xl text-gray-300 font-medium truncate";
+	let { title, artist, cover_src = "", class: className = "" } = $props();
 </script>
 
-<div class="flex items-center gap-3 bg-gray-700 rounded-md p-1 {className}">
+<div class="flex items-center gap-3 bg-[#303030] rounded-md p-1 {className}">
 	<img
 		class="h-full rounded-lg"
 		src={cover_src}
 		alt="Album Cover"
 	/>
 	<div class="flex flex-col w-full h-full">
-		<span class={trackStyle}>{title}</span>
-		<span class={artistStyle}>{artist}</span>
+		<span class="text-xl primaryText">{title}</span>
+		<span class="text-xl secondaryText">{artist}</span>
 	</div>
 </div>

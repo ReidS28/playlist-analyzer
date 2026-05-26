@@ -1,5 +1,5 @@
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
-import type { Page, PlaylistedTrack } from '@spotify/web-api-ts-sdk';
+import type { Page, PlaylistedTrack, SimplifiedPlaylist } from '@spotify/web-api-ts-sdk';
 
 const sp_sdk = SpotifyApi.withUserAuthorization(
 	import.meta.env.VITE_SPOTIFY_CLIENT_ID,
@@ -9,7 +9,8 @@ const sp_sdk = SpotifyApi.withUserAuthorization(
 
 export async function getUserPlaylists() {
 	try {
-		const playlists = await sp_sdk.currentUser.playlists.playlists();
+		//const playlists = await sp_sdk.currentUser.playlists.playlists();
+		const playlists = await sp_sdk.makeRequest<Promise<Page<SimplifiedPlaylist>>>("GET", "/me/playlists")
 		return playlists.items;
 	} catch (error) {
 		console.error("Failed to fetch playlists:", error);
@@ -18,6 +19,7 @@ export async function getUserPlaylists() {
 }
 
 export async function getPlaylistItems(playlistId: string) {
+    console.log("getting playlist items")
 	try {
 		//const response = await sp_sdk.playlists.getPlaylistItems(playlistId); // Used depricated API (/tracks)
 		const response = await sp_sdk.makeRequest<Page<PlaylistedTrack>>(
