@@ -40,7 +40,7 @@
 					/>
 				{/if}
 				<div class="flex flex-col w-full bg-teal-500">
-					<!-- <span class="secondaryText">{data.items.total} tracks</span> -->
+					<span class="secondaryText">{data?.items?.total || ""} tracks</span>
 					<span class="secondaryText"
 						>{formatDurationMs(playlistDurationMs, true)}</span
 					>

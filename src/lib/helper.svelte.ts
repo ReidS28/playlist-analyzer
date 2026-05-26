@@ -21,8 +21,7 @@ export function formatDurationMs(ms: number, shorthand = false): String | undefi
     }
 
     if (output.trim().length === 0) {
-        return;
-        // return `${ms} ${shorthand ? 'ms' : 'Milliseconds (not enough for seconds!)'}`;
+        return `${ms} ${shorthand ? 'ms' : 'Milliseconds (not enough for seconds!)'}`;
     }
 
     return output.trim();
