@@ -8,12 +8,12 @@
 
 	let tracksPromise = $derived.by(() => {
 		if (!data?.id) return null;
-		return getPlaylistItems(data.id);
+		return getPlaylistItems(data.id, data.items.total);
 	});
 	$inspect(tracksPromise);
 
+	// Sum of track lengths
 	let playlistDurationMs = $state(0);
-
 	$effect(() => {
 		if (tracksPromise) {
 			tracksPromise.then((tracks) => {
@@ -35,7 +35,7 @@
 				{#if data?.images?.[0]?.url}
 					<img
 						class="h-full w-auto aspect-square rounded-2xl"
-						src={data.images[0].url}
+						src={data?.images?.[0]?.url || ""}
 						alt="Album Cover"
 					/>
 				{/if}
@@ -53,7 +53,7 @@
 				</div>
 			{/if}
 		</div>
-		<div class="w-full h-10 bg-sp-black shrink-0"></div>
+		<div class="w-full h-10 bg-sp-black shrink-0">This will be a menue</div>
 		<!-- Make Componet -->
 	</div>
 	<ul
@@ -64,9 +64,9 @@
 		{:then tracks}
 			{#each tracks as track}
 				<TrackBar
-					title={track.item.name}
-					artist={track.item.artists[0].name}
-					cover_src={track.item.album.images[2].url}
+					title={track?.item?.name || ""}
+					artist={track?.item?.artists[0]?.name || ""}
+					cover_src={track?.item?.album?.images[2]?.url || ""}
 				></TrackBar>
 			{/each}
 		{/await}

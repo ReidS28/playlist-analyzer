@@ -1,5 +1,10 @@
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
-import type { Page, PlaylistedTrack, SimplifiedPlaylist } from '@spotify/web-api-ts-sdk';
+import type {
+	Page,
+	TrackItem,
+	PlaylistedTrack,
+	SimplifiedPlaylist,
+} from "@spotify/web-api-ts-sdk";
 
 const sp_sdk = SpotifyApi.withUserAuthorization(
 	import.meta.env.VITE_SPOTIFY_CLIENT_ID,
@@ -10,7 +15,9 @@ const sp_sdk = SpotifyApi.withUserAuthorization(
 export async function getUserPlaylists() {
 	try {
 		//const playlists = await sp_sdk.currentUser.playlists.playlists();
-		const playlists = await sp_sdk.makeRequest<Promise<Page<SimplifiedPlaylist>>>("GET", "/me/playlists")
+		const playlists = await sp_sdk.makeRequest<
+			Promise<Page<SimplifiedPlaylist>>
+		>("GET", "/me/playlists");
 		return playlists.items;
 	} catch (error) {
 		console.error("Failed to fetch playlists:", error);
@@ -18,15 +25,32 @@ export async function getUserPlaylists() {
 	}
 }
 
-export async function getPlaylistItems(playlistId: string) {
-    console.log("getting playlist items")
+export async function getPlaylistItems(
+	playlistId: string,
+	length: number = 100,
+) {
+	console.log("Getting playlist items...");
 	try {
-		//const response = await sp_sdk.playlists.getPlaylistItems(playlistId); // Used depricated API (/tracks)
-		const response = await sp_sdk.makeRequest<Page<PlaylistedTrack>>(
-			"GET",
-			`playlists/${playlistId}/items`,
-		);
-		return response.items;
+		const allItems: PlaylistedTrack[] = [];
+		let numItems = 0;
+
+		while (numItems < length) {
+			const n = Math.min(100, length - numItems);
+
+			const response = await sp_sdk.makeRequest<Page<PlaylistedTrack>>(
+				"GET",
+				`playlists/${playlistId}/items?offset=${numItems}&limit=${n}`,
+			);
+
+			if (!response.items || response.items.length === 0) {
+				break;
+			}
+
+			allItems.push(...response.items);
+			numItems += response.items.length;
+		}
+
+		return allItems;
 	} catch (error) {
 		console.error("Failed to fetch playlist tracks:", error);
 		throw error;

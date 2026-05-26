@@ -1,5 +1,4 @@
 <script>
-	import coldSpaceImg from "../assets/covers/Cold Space.png";
 	let { title, artist, cover_src = "", class: className = "" } = $props();
 </script>
 
