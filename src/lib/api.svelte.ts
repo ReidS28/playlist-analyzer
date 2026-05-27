@@ -14,10 +14,10 @@ const sp_sdk = SpotifyApi.withUserAuthorization(
 
 export async function getUserPlaylists() {
 	try {
-		//const playlists = await sp_sdk.currentUser.playlists.playlists();
+		//const playlists = await sp_sdk.currentUser.playlists.playlists(); // Doesn't cache and so uses more API
 		const playlists = await sp_sdk.makeRequest<
-			Promise<Page<SimplifiedPlaylist>>
-		>("GET", "/me/playlists");
+            Page<SimplifiedPlaylist>
+        >("GET", "me/playlists");
 		return playlists.items;
 	} catch (error) {
 		console.error("Failed to fetch playlists:", error);
