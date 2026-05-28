@@ -52,16 +52,14 @@
 		<!-- Make Componet -->
 	</div>
 	<ul
-		class="flex flex-col gap-1 p-1 w-full h-full *:shrink-0 *:w-full *:h-20 {className}"
+		class="flex flex-col gap-1 p-1 w-full h-full *:shrink-0 *:w-full *:h-20"
 	>
 		{#await tracksPromise}
 			<p>Loading tracks...</p>
 		{:then tracks}
 			{#each tracks as track}
 				<TrackBar
-					title={track?.item?.name || ""}
-					artist={track?.item?.artists[0]?.name || ""}
-					cover_src={track?.item?.album?.images[2]?.url || ""}
+					data={track}
 				></TrackBar>
 			{/each}
 		{/await}
