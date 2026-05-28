@@ -16,6 +16,7 @@
 </script>
 
 <div class="playlist-container flex items-center justify-center">
+	<!-- Replace w/ Better style -->
 	<button
 		onclick={logOut}
 		class="absolute top-4 right-4 px-4 py-2 text-sm font-semibold text-white bg-gray-800 hover:bg-gray-700 active:scale-95 transition-all rounded-full border border-gray-600 cursor-pointer"

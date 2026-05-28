@@ -6,18 +6,31 @@ import type {
 	SimplifiedPlaylist,
 } from "@spotify/web-api-ts-sdk";
 
+// Stops API from working
+//(SpotifyApi as any)["rootUrl"] = "/api/v1/";
+
 const sp_sdk = SpotifyApi.withUserAuthorization(
 	import.meta.env.VITE_SPOTIFY_CLIENT_ID,
 	import.meta.env.VITE_SPOTIFY_REDIRECT_URI,
 	["playlist-read-private", "playlist-read-collaborative"],
 );
 
-export async function getUserPlaylists() {
+export async function getUserPlaylists(): Promise<SimplifiedPlaylist[]> {
+	const CACHE_KEY = "spotify_user_playlists";
+
 	try {
-		//const playlists = await sp_sdk.currentUser.playlists.playlists(); // Doesn't cache and so uses more API
-		const playlists = await sp_sdk.makeRequest<
-            Page<SimplifiedPlaylist>
-        >("GET", "me/playlists");
+		const cachedPlaylists = localStorage.getItem(CACHE_KEY);
+		if (cachedPlaylists) {
+			return JSON.parse(cachedPlaylists);
+		}
+
+		const playlists = await sp_sdk.makeRequest<Page<SimplifiedPlaylist>>(
+			"GET",
+			"me/playlists",
+		);
+
+		localStorage.setItem(CACHE_KEY, JSON.stringify(playlists.items));
+
 		return playlists.items;
 	} catch (error) {
 		console.error("Failed to fetch playlists:", error);

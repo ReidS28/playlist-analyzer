@@ -3,6 +3,7 @@
 	import { formatDurationMs } from "../lib/helper.svelte";
 	import type { ActionReturn } from "svelte/action";
 	import TrackBar from "./TrackBar.svelte";
+	import SortingMenu from "./SortMenu/SortMenu.svelte";
 	let { data, class: className } = $props();
 
 	let tracksPromise = $derived.by(() => {
@@ -29,13 +30,13 @@
 	class="flex flex-col gap-1 bg-[#212121] rounded-3xl border-6 border-sp-green w-full h-full overflow-x-hidden overflow-y-auto scrollbar-thumb-sp-green {className}"
 >
 	<div class="flex flex-col">
-		<div class="flex flex-row p-2 gap-2 h-40 w-full shrink-0 bg-red-500-">
+		<div class="flex flex-row p-2 gap-2 h-40 w-full shrink-0 bg-red-500">
 			<img
 				class="h-full w-auto aspect-square rounded-2xl"
 				src={data?.images?.[0]?.url || ""}
 				alt="Album Cover"
 			/>
-			<div class="flex flex-col h-full w-full bg-teal-500-">
+			<div class="flex flex-col h-full w-full bg-teal-500">
 				<div
 					class="w-full grow text-5xl primaryText overflow-hidden break-all line-clamp-3 bg-orange-500"
 				>
@@ -47,7 +48,7 @@
 				>
 			</div>
 		</div>
-		<div class="w-full h-10 bg-sp-black shrink-0">This will be a menue</div>
+		<SortingMenu></SortingMenu>
 		<!-- Make Componet -->
 	</div>
 	<ul
