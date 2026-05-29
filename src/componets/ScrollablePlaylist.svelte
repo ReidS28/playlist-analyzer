@@ -11,7 +11,6 @@
 		if (!data?.id) return null;
 		return getPlaylistItems(data.id, data.items.total);
 	});
-	//$inspect(tracksPromise);
 
 	// Sum of track lengths
 	let playlistDurationMs = $state(0);
@@ -27,12 +26,10 @@
 	});
 
 	let tracks = new OrderedTrackList(() => tracksPromise);
-
-	$inspect(tracks.arrangedTracks);
 </script>
 
 <div
-	class="flex flex-col gap-1 bg-[#212121] rounded-3xl border-6 border-sp-green w-full h-full overflow-x-hidden overflow-y-auto scrollbar-thumb-sp-green {className}"
+	class="flex flex-col gap-0 bg-[#212121] rounded-3xl border-6 border-sp-green w-full h-full overflow-x-hidden overflow-y-auto scrollbar-thumb-sp-green {className}"
 >
 	<div class="flex flex-col">
 		<div class="flex flex-row p-2 gap-2 h-40 w-full shrink-0 bg-red-500-">
@@ -53,9 +50,8 @@
 				>
 			</div>
 		</div>
-		<SortingMenu tracks={tracks}></SortingMenu>
-		<!-- Make Componet -->
 	</div>
+	<SortingMenu tracks={tracks}></SortingMenu>
 	<ul class="flex flex-col gap-1 p-1 w-full h-full *:shrink-0 *:w-full *:h-20">
 		{#if tracks.arrangedTracks}
 			{#each tracks.arrangedTracks as track}

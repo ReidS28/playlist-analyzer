@@ -11,7 +11,6 @@
 
 	onMount(async () => {
 		playlists = await getUserPlaylists();
-		//console.log($state.snapshot(playlists));
 	});
 </script>
 
