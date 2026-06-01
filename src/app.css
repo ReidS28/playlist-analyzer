@@ -1,9 +1,21 @@
 @import "tailwindcss";
 
+@font-face {
+	font-family: "Satoshi";
+	src:
+		url("/fonts/satoshi/Satoshi-Variable.woff2") format("woff2-variations"),
+		url("/fonts/satoshi/Satoshi-Variable.woff2") format("woff2");
+	font-weight: 300 900;
+	font-style: normal;
+	font-display: swap;
+}
+
 @theme {
 	--color-sp-green: #1ed760;
 	--color-sp-white: #ffffff;
 	--color-sp-black: #121212;
+
+	--font-sans: 'Satoshi', sans-serif;
 }
 
 @layer base {
@@ -31,7 +43,7 @@
 		white-space: nowrap;
 	}
 
-	.order-button.selected{
-		@apply bg-sp-green
+	.order-button.selected {
+		@apply bg-sp-green;
 	}
 }
