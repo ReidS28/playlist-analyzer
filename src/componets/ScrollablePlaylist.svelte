@@ -1,10 +1,12 @@
 <script lang="ts">
+	import { OrderedTrackList } from "../lib/orderedTrackList.svelte";
+
 	import { getPlaylistItems } from "../lib/api.svelte";
 	import { formatDurationMs } from "../lib/helper.svelte";
-	import type { ActionReturn } from "svelte/action";
+	
 	import TrackBar from "./TrackBar.svelte";
-	import SortingMenu from "./SortMenu/SortMenu.svelte";
-	import { OrderedTrackList } from "../lib/orderedTrackList.svelte";
+	import OrderMenu from "./SortMenu/OrderMenu.svelte";
+
 	let { data, class: className } = $props();
 
 	let tracksPromise = $derived.by(() => {
@@ -51,7 +53,7 @@
 			</div>
 		</div>
 	</div>
-	<SortingMenu tracks={tracks}></SortingMenu>
+	<OrderMenu {tracks}></OrderMenu>
 	<ul class="flex flex-col gap-1 p-1 w-full h-full *:shrink-0 *:w-full *:h-20">
 		{#if tracks.arrangedTracks}
 			{#each tracks.arrangedTracks as track}
