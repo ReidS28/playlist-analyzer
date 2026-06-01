@@ -1,13 +1,31 @@
 <script lang="ts">
+	import { onMount } from "svelte";
+
 	import { OrderedTrackList } from "../lib/orderedTrackList.svelte";
 
 	import { getPlaylistItems } from "../lib/api.svelte";
 	import { formatDurationMs } from "../lib/helper.svelte";
-	
+
 	import TrackBar from "./TrackBar.svelte";
 	import OrderMenu from "./SortMenu/OrderMenu.svelte";
 
 	let { data, class: className } = $props();
+
+	let navbarShrunk = $state(false);
+	let observerTarget: HTMLDivElement | undefined = undefined;
+
+	onMount(() => {
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				navbarShrunk = !entry.isIntersecting;
+			},
+			{ threshold: 0 },
+		);
+
+		if (observerTarget) observer.observe(observerTarget);
+
+		return () => observer.disconnect();
+	});
 
 	let tracksPromise = $derived.by(() => {
 		if (!data?.id) return null;
@@ -31,25 +49,50 @@
 </script>
 
 <div
-	class="flex flex-col gap-0 bg-[#212121] rounded-3xl border-6 border-sp-green w-full h-full overflow-x-hidden overflow-y-auto scrollbar-thumb-sp-green {className}"
+	class="flex flex-col gap-0 bg-sp-dark-grey rounded-3xl border-6 border-sp-green w-full h-full relative overflow-x-hidden overflow-y-auto scrollbar-thumb-sp-green {className}"
 >
-	<div class="flex flex-col sticky top-0 bg-purple-600">
-		<div class="flex flex-row p-2 gap-2 h-40 w-full bg-red-500">
+	<div
+		bind:this={observerTarget}
+		class="absolute top-0 h-5 w-full pointer-events-none"
+	></div>
+	<div class="flex flex-col sticky top-0 h-50">
+		<div
+			class="flex flex-row p-2 gap-2 min-h-20 w-full shrink overflow-hidden transition-all ease-in-out bg-sp-dark-grey bg-red-500-"
+			class:h-40={!navbarShrunk}
+			class:duration-150={!navbarShrunk}
+			class:h-20={navbarShrunk}
+			class:duration-500={navbarShrunk}
+		>
 			<img
-				class="h-full w-auto aspect-square rounded-2xl"
+				class="h-full w-auto aspect-square transition-all"
+				class:rounded-2xl={!navbarShrunk}
+				class:duration-150={!navbarShrunk}
+				class:rounded-md={navbarShrunk}
+				class:duration-500={navbarShrunk}
 				src={data?.images?.[0]?.url || ""}
 				alt="Album Cover"
 			/>
-			<div class="flex flex-col h-full w-full bg-teal-500">
+			<div class="flex flex-col h-full w-full bg-teal-500-">
 				<div
-					class="w-full grow text-5xl primaryText overflow-hidden break-all line-clamp-3 bg-orange-500"
+					class="w-full grow text-5xl primaryText overflow-hidden break-all line-clamp-3 bg-orange-500-"
 				>
 					{data?.name || ""}
 				</div>
-				<span class="secondaryText">{data?.items?.total || ""} tracks</span>
-				<span class="secondaryText"
-					>{formatDurationMs(playlistDurationMs, true)}</span
+				<div
+					class="flex flex-col overflow-hidden transition-all ease-in-out"
+					class:opacity-100={!navbarShrunk}
+					class:max-h-12={!navbarShrunk}
+					class:duration-150={!navbarShrunk}
+					class:opacity-0={navbarShrunk}
+					class:max-h-0={navbarShrunk}
+					class:duration-500={navbarShrunk}
+					class:pointer-events-none={navbarShrunk}
 				>
+					<span class="secondaryText">{data?.items?.total || ""} tracks</span>
+					<span class="secondaryText"
+						>{formatDurationMs(playlistDurationMs, true)}</span
+					>
+				</div>
 			</div>
 		</div>
 		<OrderMenu {tracks}></OrderMenu>
