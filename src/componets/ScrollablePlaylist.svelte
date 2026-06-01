@@ -12,20 +12,24 @@
 	let { data, class: className } = $props();
 
 	let navbarShrunk = $state(false);
-	let observerTarget: HTMLDivElement | undefined = undefined;
+    let scrollContainer: HTMLDivElement | undefined = undefined;
+    let observerTarget: HTMLDivElement | undefined = undefined;
 
-	onMount(() => {
-		const observer = new IntersectionObserver(
-			([entry]) => {
-				navbarShrunk = !entry.isIntersecting;
-			},
-			{ threshold: 0 },
-		);
+    onMount(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                navbarShrunk = !entry.isIntersecting;
+            },
+            { 
+                root: scrollContainer,
+                threshold: 0 
+            },
+        );
 
-		if (observerTarget) observer.observe(observerTarget);
+        if (observerTarget) observer.observe(observerTarget);
 
-		return () => observer.disconnect();
-	});
+        return () => observer.disconnect();
+    });
 
 	let tracksPromise = $derived.by(() => {
 		if (!data?.id) return null;
@@ -49,11 +53,12 @@
 </script>
 
 <div
-	class="flex flex-col gap-0 bg-sp-dark-grey rounded-3xl border-6 border-sp-green w-full h-full relative overflow-x-hidden overflow-y-auto scrollbar-thumb-sp-green {className}"
+	bind:this={scrollContainer}
+	class="flex flex-col gap-0 bg-sp-dark-grey rounded-3xl border-6 border-sp-green w-full h-full relative overflow-x-hidden overflow-y-auto [overflow-anchor:none] scrollbar-thumb-sp-green {className}"
 >
 	<div
 		bind:this={observerTarget}
-		class="absolute top-0 h-5 w-full pointer-events-none"
+		class="absolute top-0 h-5 w-0 pointer-events-none"
 	></div>
 	<div class="flex flex-col sticky top-0 h-50">
 		<div
