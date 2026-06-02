@@ -15,7 +15,7 @@ export function formatDurationMs(ms: number, shorthand = false): String | undefi
     for (const { label, seconds } of units) {
         const value = Math.floor(remaining / seconds);
         if (value > 0) {
-            output += `${value}${shorthand ? label[1] : label[0]} `;
+            output += `${value}${shorthand ? label[1] : (" " + label[0])} `;
             remaining -= value * seconds;
         }
     }

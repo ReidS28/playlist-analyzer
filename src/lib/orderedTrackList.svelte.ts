@@ -5,7 +5,7 @@ export class OrderedTrackList {
 
 	public currentOrder = $state("custom");
 	public arrangedTracks: PlaylistedTrack[] = $state([]);
-
+	
 	public constructor(getTracks: () => Promise<PlaylistedTrack[]> | null) {
 		this.getTracks = getTracks;
 
@@ -13,13 +13,14 @@ export class OrderedTrackList {
 			this.resetOrder();
 		});
 	}
-
+	
 	public async resetOrder() {
 		try {
 			const tracks = this.getTracks();
 			if (!tracks) return;
 			const actualTracks = await tracks;
 			this.arrangedTracks = [...actualTracks];
+			this.currentOrder = "custom";
 		} catch (error) {
 			console.error("Failed to reset track order:", error);
 		}
@@ -54,22 +55,22 @@ export class OrderedTrackList {
 	}
 
 	public async sortName() {
+		await this.sort(this.compareName);
 		this.currentOrder = "name";
-		return this.sort(this.compareName);
 	}
 
 	public async sortArtistName() {
+		await this.sort(this.compareArtistName);
 		this.currentOrder = "artist";
-		return this.sort(this.compareArtistName);
 	}
 
 	public async sortLength() {
-		this.currentOrder = "lenght";
-		return this.sort(this.compareLength);
+		await this.sort(this.compareLength);
+		this.currentOrder = "length";
 	}
 
 	public async sortDateAdded() {
+		await this.sort(this.compareDateAdded);
 		this.currentOrder = "dateAdded";
-		return this.sort(this.compareDateAdded);
 	}
 }
