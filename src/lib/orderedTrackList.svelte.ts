@@ -3,6 +3,7 @@ import type { PlaylistedTrack } from "@spotify/web-api-ts-sdk";
 export class OrderedTrackList {
 	private getTracks: () => Promise<PlaylistedTrack[]> | null;
 
+	public currentOrder = $state("custom");
 	public arrangedTracks: PlaylistedTrack[] = $state([]);
 
 	public constructor(getTracks: () => Promise<PlaylistedTrack[]> | null) {
@@ -53,18 +54,22 @@ export class OrderedTrackList {
 	}
 
 	public async sortName() {
+		this.currentOrder = "name";
 		return this.sort(this.compareName);
 	}
 
 	public async sortArtistName() {
+		this.currentOrder = "artist";
 		return this.sort(this.compareArtistName);
 	}
 
 	public async sortLength() {
+		this.currentOrder = "lenght";
 		return this.sort(this.compareLength);
 	}
 
 	public async sortDateAdded() {
+		this.currentOrder = "dateAdded";
 		return this.sort(this.compareDateAdded);
 	}
 }

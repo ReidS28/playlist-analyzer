@@ -1,7 +1,6 @@
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
 import type {
 	Page,
-	TrackItem,
 	PlaylistedTrack,
 	SimplifiedPlaylist,
 } from "@spotify/web-api-ts-sdk";
@@ -15,13 +14,28 @@ const sp_sdk = SpotifyApi.withUserAuthorization(
 	["playlist-read-private", "playlist-read-collaborative"],
 );
 
+export async function clearCache(): Promise<void> {
+	let i = 0;
+	while (i < localStorage.length) {
+		let key = localStorage.key(i);
+		if (key?.startsWith("sp_cache_")) {
+			localStorage.removeItem(key);
+		} else {
+			i++;
+		}
+	}
+}
+
 export async function getUserPlaylists(): Promise<SimplifiedPlaylist[]> {
-	const CACHE_KEY = "spotify_user_playlists";
+	const CACHE_KEY = "sp_cache_user_playlists";
 
 	try {
-		const cachedPlaylists = localStorage.getItem(CACHE_KEY);
-		if (cachedPlaylists) {
-			return JSON.parse(cachedPlaylists);
+		const cachedData = localStorage.getItem(CACHE_KEY);
+		if (cachedData) {
+			console.log(`Using cached data from ${CACHE_KEY}`);
+			return JSON.parse(cachedData);
+		} else {
+			console.log(`No Cache for ${CACHE_KEY}`);
 		}
 
 		const playlists = await sp_sdk.makeRequest<Page<SimplifiedPlaylist>>(
@@ -42,8 +56,17 @@ export async function getPlaylistItems(
 	playlistId: string,
 	length: number = 100,
 ) {
-	console.log("Getting playlist items...");
+	const CACHE_KEY = `sp_cache_playlist_${playlistId}_${length}`;
 	try {
+		const cachedData = localStorage.getItem(CACHE_KEY);
+
+		if (cachedData) {
+			console.log(`Using cached data from ${CACHE_KEY}`);
+			return JSON.parse(cachedData) as PlaylistedTrack[];
+		} else {
+			console.log(`No Cache for ${CACHE_KEY}`);
+		}
+
 		const allItems: PlaylistedTrack[] = [];
 		let numItems = 0;
 
@@ -62,6 +85,8 @@ export async function getPlaylistItems(
 			allItems.push(...response.items);
 			numItems += response.items.length;
 		}
+
+		localStorage.setItem(CACHE_KEY, JSON.stringify(allItems));
 
 		return allItems;
 	} catch (error) {
