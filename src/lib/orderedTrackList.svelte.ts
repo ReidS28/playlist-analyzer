@@ -42,20 +42,13 @@ export class OrderedTrackList {
 			b: PlaylistedTrack<TrackItem>,
 		) => number = (a, b) => 0;
 
-		if (sortOrder == "custom") {
-			await this.resetOrder();
-			return;
-		} else if (sortOrder == "name") {
-			compare = this.compareName;
-		} else if (sortOrder == "artist") {
-			compare = this.compareArtistName;
-		} else if (sortOrder == "length") {
-			compare = this.compareLength;
-		} else if (sortOrder == "dateAdded") {
-			compare = this.compareDateAdded;
-		}
+		const sortOrderBase = this.getOrderBase(sortOrder);
+		const sortOrderReversed = this.getOrderReversed(sortOrder);
 
-		if ((this.getOrderBase() == this.getOrderBase(sortOrder)) && !this.getOrderReversed(sortOrder)) {
+		if (
+			this.getOrderBase() == sortOrderBase &&
+			!sortOrderReversed
+		) {
 			this.arrangedTracks.reverse();
 			if (this.getOrderReversed()) {
 				this.currentOrder = this.currentOrder.replace(".reversed", "");
@@ -68,14 +61,30 @@ export class OrderedTrackList {
 			if (!this.arrangedTracks || this.arrangedTracks.length === 0) return;
 		}
 
-		if (!this.getOrderReversed(sortOrder)){
-			this.arrangedTracks = this.arrangedTracks.sort((a, b) => compare(a, b));
-		} else {
-			this.arrangedTracks = this.arrangedTracks.sort((a, b) => -compare(a, b));
-
+		if (sortOrderBase == "custom") {
+			await this.resetOrder();
+			if (sortOrderReversed) {
+				this.arrangedTracks.reverse();
+				this.currentOrder += ".reversed";
+			}
+			return;
+		} else if (sortOrderBase == "name") {
+			compare = this.compareName;
+		} else if (sortOrderBase == "artist") {
+			compare = this.compareArtistName;
+		} else if (sortOrderBase == "length") {
+			compare = this.compareLength;
+		} else if (sortOrderBase == "dateAdded") {
+			compare = this.compareDateAdded;
 		}
 
-		this.currentOrder = sortOrder
+		if (!sortOrderReversed) {
+			this.arrangedTracks.sort((a, b) => compare(a, b));
+		} else {
+			this.arrangedTracks.sort((a, b) => -compare(a, b));
+		}
+
+		this.currentOrder = sortOrder;
 		return;
 	}
 
