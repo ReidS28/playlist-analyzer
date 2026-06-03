@@ -1,28 +1,42 @@
-export function formatDurationMs(ms: number, shorthand = false): String | undefined {
-    const units = [
-        { label: ["Years", "Yr"], seconds: 31536000 },
-        { label: ["Months", "Mn"], seconds: 2628288 },
-        { label: ["Weeks", "wk"], seconds: 604800 },
-        { label: ["Days", "d"], seconds: 86400 },
-        { label: ["Hours", "h"], seconds: 3600 },
-        { label: ["Minutes", "m"], seconds: 60 },
-        { label: ["Seconds", "s"], seconds: 1 }
-    ];
+import { Temporal } from "@js-temporal/polyfill";
 
-    let remaining = Math.floor(ms / 1000);
-    let output = "";
+export function formatDurationMs(
+	ms: number,
+	shorthand = false,
+): String | undefined {
+	const units = [
+		{ label: ["Years", "Yr"], seconds: 31536000 },
+		{ label: ["Months", "Mn"], seconds: 2628288 },
+		{ label: ["Weeks", "wk"], seconds: 604800 },
+		{ label: ["Days", "d"], seconds: 86400 },
+		{ label: ["Hours", "h"], seconds: 3600 },
+		{ label: ["Minutes", "m"], seconds: 60 },
+		{ label: ["Seconds", "s"], seconds: 1 },
+	];
 
-    for (const { label, seconds } of units) {
-        const value = Math.floor(remaining / seconds);
-        if (value > 0) {
-            output += `${value}${shorthand ? label[1] : (" " + label[0])} `;
-            remaining -= value * seconds;
-        }
-    }
+	let remaining = Math.floor(ms / 1000);
+	let output = "";
 
-    if (output.trim().length === 0) {
-        return `${ms} ${shorthand ? 'ms' : 'Milliseconds (not enough for seconds!)'}`;
-    }
+	for (const { label, seconds } of units) {
+		const value = Math.floor(remaining / seconds);
+		if (value > 0) {
+			output += `${value}${shorthand ? label[1] : " " + label[0]} `;
+			remaining -= value * seconds;
+		}
+	}
 
-    return output.trim();
+	if (output.trim().length === 0) {
+		return `${ms} ${shorthand ? "ms" : "Milliseconds (not enough for seconds!)"}`;
+	}
+
+	return output.trim();
+}
+
+export function formatIsoToLocal(isoString: string) {
+	const instant = Temporal.Instant.from(isoString);
+	const localDate = instant.toZonedDateTimeISO(Temporal.Now.timeZoneId());
+	const yyyy = localDate.year;
+	const mm = String(localDate.month).padStart(2, '0');
+	const dd = String(localDate.day).padStart(2, '0');
+	return `${yyyy}/${mm}/${dd}`;
 }

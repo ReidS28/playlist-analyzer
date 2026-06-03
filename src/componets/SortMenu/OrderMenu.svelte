@@ -3,8 +3,6 @@
 	import OrderButton from "./OrderButton.svelte";
 
 	let { tracks }: { tracks: OrderedTrackList } = $props();
-
-	let currentSort = $state("custom");
 </script>
 
 <div

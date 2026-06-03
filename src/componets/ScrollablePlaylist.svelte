@@ -105,7 +105,7 @@
 	<ul class="flex flex-col gap-1 p-1 w-full h-full *:shrink-0 *:w-full *:h-20">
 		{#if tracks.arrangedTracks}
 			{#each tracks.arrangedTracks as track}
-				<TrackBar data={track}></TrackBar>
+				<TrackBar data={track} currentOrder={tracks.currentOrder}></TrackBar>
 			{/each}
 		{:else}
 			<p>Loading tracks...</p>
