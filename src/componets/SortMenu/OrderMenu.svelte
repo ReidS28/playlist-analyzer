@@ -9,46 +9,34 @@
 	class="flex flex-row p-1 gap-1 w-full h-10 bg-sp-black shrink-0 overflow-x-scroll scrollbar-none"
 >
 	<OrderButton
-		selected={tracks.currentOrder === "custom"}
-		onclick={() => {
-			tracks?.resetOrder();
-		}}
+		sortOrder="custom"
+		{tracks}>Custom</OrderButton
 	>
-		Custom
-	</OrderButton>
 
 	<OrderButton
-		selected={tracks.currentOrder === "name"}
-		onclick={() => {
-			tracks?.sortName();
-		}}
+		sortOrder="name"
+		{tracks}
 	>
 		Name
 	</OrderButton>
 
 	<OrderButton
-		selected={tracks.currentOrder === "artist"}
-		onclick={() => {
-			tracks?.sortArtistName();
-		}}
+		sortOrder="artist"
+		{tracks}
 	>
 		Artist
 	</OrderButton>
 
 	<OrderButton
-		selected={tracks.currentOrder === "length"}
-		onclick={() => {
-			tracks?.sortLength();
-		}}
+		sortOrder="length"
+		{tracks}
 	>
 		Length
 	</OrderButton>
 
 	<OrderButton
-		selected={tracks.currentOrder === "dateAdded"}
-		onclick={() => {
-			tracks?.sortDateAdded();
-		}}
+		sortOrder="dateAdded"
+		{tracks}
 	>
 		Date Added
 	</OrderButton>
