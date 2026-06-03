@@ -12,24 +12,24 @@
 	let { data, class: className } = $props();
 
 	let navbarShrunk = $state(false);
-    let scrollContainer: HTMLDivElement | undefined = undefined;
-    let observerTarget: HTMLDivElement | undefined = undefined;
+	let scrollContainer: HTMLDivElement | undefined = undefined;
+	let observerTarget: HTMLDivElement | undefined = undefined;
 
-    onMount(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                navbarShrunk = !entry.isIntersecting;
-            },
-            { 
-                root: scrollContainer,
-                threshold: 0 
-            },
-        );
+	onMount(() => {
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				navbarShrunk = !entry.isIntersecting;
+			},
+			{
+				root: scrollContainer,
+				threshold: 0,
+			},
+		);
 
-        if (observerTarget) observer.observe(observerTarget);
+		if (observerTarget) observer.observe(observerTarget);
 
-        return () => observer.disconnect();
-    });
+		return () => observer.disconnect();
+	});
 
 	let tracksPromise = $derived.by(() => {
 		if (!data?.id) return null;
@@ -105,7 +105,10 @@
 	<ul class="flex flex-col gap-1 p-1 w-full h-full *:shrink-0 *:w-full *:h-20">
 		{#if tracks.arrangedTracks}
 			{#each tracks.arrangedTracks as track}
-				<TrackBar data={track} currentOrder={tracks.currentOrder}></TrackBar>
+				<TrackBar
+					data={track}
+					baseCurrentOrder={tracks.getOrderBase()}
+				></TrackBar>
 			{/each}
 		{:else}
 			<p>Loading tracks...</p>

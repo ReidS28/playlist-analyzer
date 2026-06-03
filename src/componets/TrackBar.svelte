@@ -5,19 +5,19 @@
 
 	interface Props {
 		data: PlaylistedTrack | undefined;
-		currentOrder: String | undefined;
+		baseCurrentOrder: String | undefined;
 		class?: string;
 	}
 	let {
 		data,
-		currentOrder = undefined,
+		baseCurrentOrder = undefined,
 		class: className = "",
 	}: Props = $props();
 
 	function getSpecialValue(): String | undefined {
-		if (currentOrder == "length") {
+		if (baseCurrentOrder == "length") {
 			return formatDurationMs(data?.item?.duration_ms, true) + "" || "";
-		} else if (currentOrder == "dateAdded") {
+		} else if (baseCurrentOrder == "dateAdded") {
 			return formatIsoToLocal(String(data?.added_at)) || "";
 		}
 		return undefined;
@@ -33,16 +33,16 @@
 	<div class="flex flex-col min-w-0 w-full h-full">
 		<span
 			class="text-xl primaryText truncate shrink-0"
-			class:!text-sp-green={currentOrder == "name"}
+			class:!text-sp-green={baseCurrentOrder == "name"}
 			>{data?.item?.name || ""}</span
 		>
 		<div class="flex w-full h-full">
 			<span
 				class="text-xl secondaryText w-full truncate"
-				class:!text-sp-green={currentOrder == "artist"}
+				class:!text-sp-green={baseCurrentOrder == "artist"}
 				>{data?.item?.artists[0]?.name || ""}</span
 			>
-			{#if currentOrder && getSpecialValue()}
+			{#if baseCurrentOrder && getSpecialValue()}
 				<div
 					class="mt-auto w-fit h-fit px-1 border-3 border-sp-green/60 rounded-xl bg-sp-green/40"
 				>
