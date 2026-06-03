@@ -16,9 +16,9 @@
 
 	function getSpecialValue(): String | undefined {
 		if (currentOrder == "length") {
-			return (formatDurationMs(data?.item?.duration_ms, true) + "" || "");
+			return formatDurationMs(data?.item?.duration_ms, true) + "" || "";
 		} else if (currentOrder == "dateAdded") {
-			return (formatIsoToLocal(String(data?.added_at))|| "");
+			return formatIsoToLocal(String(data?.added_at)) || "";
 		}
 		return undefined;
 	}
@@ -31,11 +31,15 @@
 		alt="Album Cover"
 	/>
 	<div class="flex flex-col min-w-0 w-full h-full">
-		<span class="text-xl primaryText truncate shrink-0"
+		<span
+			class="text-xl primaryText truncate shrink-0"
+			class:!text-sp-green={currentOrder == "name"}
 			>{data?.item?.name || ""}</span
 		>
 		<div class="flex w-full h-full">
-			<span class="text-xl secondaryText w-full truncate"
+			<span
+				class="text-xl secondaryText w-full truncate"
+				class:!text-sp-green={currentOrder == "artist"}
 				>{data?.item?.artists[0]?.name || ""}</span
 			>
 			{#if currentOrder && getSpecialValue()}
