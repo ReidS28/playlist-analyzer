@@ -1,26 +1,24 @@
 <script lang="ts">
+	interface Props {
+		sortOrder?: string | undefined;
+		class?: string;
+	}
 
-    interface Props {
-        sortOrder?: string | undefined
-        class?: string;
-    }
+	let { sortOrder, class: className }: Props = $props();
 
-    let { sortOrder, class: className }: Props = $props();
-
+    let validOrder: boolean = $derived(!sortOrder)
 </script>
 
-<div class="*:h-6 *:p-1 *:border-[1.5px] *:border-sp-light-grey *:rounded *:items-center *:shrink-0 {className} bg-pink-500">
-		{#if sortOrder}
-			<div
-				class="flex flex-row w-fit border-[1.5px] border-sp-light-grey rounded bg-sp-grey"
-			>
-				{sortOrder}
-			</div>
+<div class={className}>
+	<div
+		class="flex flex-row w-full h-6 p-1 items-center justify-center border-[1.5px] rounded truncate shrink-0 {validOrder
+			? 'border-sp-light-grey bg-sp-grey border-dashed'
+			: 'border-sp-green bg-sp-green/20'}"
+	>
+		{#if validOrder}
+			Select a trait
 		{:else}
-			<div
-				class="flex flex-row w-full justify-center border-[1.5px] border-dashed border-sp-light-grey rounded bg-sp-grey"
-			>
-				Select a trait
-			</div>
+			{sortOrder}
 		{/if}
 	</div>
+</div>

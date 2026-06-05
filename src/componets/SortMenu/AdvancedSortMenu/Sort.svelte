@@ -10,13 +10,13 @@
 	import Trait from "./Trait.svelte";
 
 	interface Props {
+        sortOrder?: string | undefined;
 		class?: string;
 		children?: Snippet;
 	}
 
-	let { class: className, children }: Props = $props();
+	let {  sortOrder, class: className, children }: Props = $props();
 
-	let sortOrder: string | undefined = $state("");
 	let reversed: boolean = $state(false);
 </script>
 
@@ -25,19 +25,20 @@
 >
 	<FaIcon
 		icon={faSort}
-		class="w-fit h-4/5"
+		class="w-fit h-4/5 shrink-0"
 	></FaIcon>
 	<Trait
 		{sortOrder}
-		class="m-auto"
+		class="flex-1 m-auto min-w-0"
 	></Trait>
-
 	<button
-        onclick={() => {reversed = !reversed}}
+		onclick={() => {
+			reversed = !reversed;
+		}}
 		class="h-full aspect-square shrink-0 rounded-sm items-center hover:bg-sp-green/40 bg-sp-grey"
 	>
 		<FaIcon
-			icon={!reversed? faArrowUp : faArrowDown}
+			icon={!reversed ? faArrowUp : faArrowDown}
 			class="w-fit h-4/5 m-auto"
 		></FaIcon>
 	</button>
