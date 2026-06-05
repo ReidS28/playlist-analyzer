@@ -13,6 +13,10 @@
 @theme {
 	--color-sp-green: #1ed760;
 	--color-sp-white: #ffffff;
+	--color-sp-light-grey: #b3b3b3;
+	--color-sp-med-light-grey: #838383;
+	--color-sp-grey: #535353;
+	--color-sp-med-dark-grey: #3a3a3a;
 	--color-sp-dark-grey: #212121;
 	--color-sp-black: #121212;
 
@@ -42,9 +46,5 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
-	}
-
-	.order-button.selected {
-		@apply bg-sp-green;
 	}
 }

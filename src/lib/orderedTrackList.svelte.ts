@@ -45,10 +45,7 @@ export class OrderedTrackList {
 		const sortOrderBase = this.getOrderBase(sortOrder);
 		const sortOrderReversed = this.getOrderReversed(sortOrder);
 
-		if (
-			this.getOrderBase() == sortOrderBase &&
-			!sortOrderReversed
-		) {
+		if (this.getOrderBase() == sortOrderBase && !sortOrderReversed) {
 			this.arrangedTracks.reverse();
 			if (this.getOrderReversed()) {
 				this.currentOrder = this.currentOrder.replace(".reversed", "");
@@ -86,6 +83,14 @@ export class OrderedTrackList {
 
 		this.currentOrder = sortOrder;
 		return;
+	}
+
+	public async randomize(): Promise<void> {
+		await this.resetOrder();
+		for (let i = this.arrangedTracks.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[this.arrangedTracks[i], this.arrangedTracks[j]] = [this.arrangedTracks[j], this.arrangedTracks[i]];
+		}
 	}
 
 	public compareName = (a: PlaylistedTrack, b: PlaylistedTrack): number => {

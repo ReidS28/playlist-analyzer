@@ -4,7 +4,7 @@
 
 	import type { OrderedTrackList } from "../../lib/orderedTrackList.svelte";
 	import OrderButton from "./OrderButton.svelte";
-
+	import AdvancedSortMenu from "./AdvancedSortMenu/AdvancedSortMenu.svelte";
 	interface Props {
 		tracks: OrderedTrackList;
 		navbarShrunk: boolean;
@@ -13,8 +13,9 @@
 	let { tracks, navbarShrunk, scrollVelocity }: Props = $props();
 
 	const icon = faEllipsis;
+	const paths = Array.isArray(icon.icon[4]) ? icon.icon[4] : [icon.icon[4]];
 
-	//let menuOpen = $derived(!navbarShrunk);
+	// TODO: Have this start closed
 	let menuOpen = $state(true);
 
 	$effect(() => {
@@ -22,11 +23,9 @@
 			menuOpen = false;
 		}
 	});
-
-	$inspect(menuOpen);
 </script>
 
-<div class="bg-red-500">
+<div class="">
 	<div
 		class="flex flex-row p-1 gap-1 w-full h-10 bg-sp-black shrink-0 overflow-x-scroll scrollbar-none"
 	>
@@ -62,6 +61,8 @@
 		>
 			Date Added
 		</OrderButton>
+
+		<!-- TODO: Make Advanced Menu Button stay on screen when screen too small -->
 		<button
 			type="button"
 			onclick={() => {
@@ -69,23 +70,21 @@
 				if (!navbarShrunk) {
 				}
 			}}
-			class="ml-auto px-3 bg-sp-dark-grey rounded-full order-button"
+			class="ml-auto px-3 bg-sp-dark-grey rounded-full hover:bg-sp-green/40"
+			class:bg-sp-green={tracks?.getOrderBase() == "advanced"}
 			aria-label="Open menu"
 		>
 			<svg
 				viewBox="0 0 {icon.icon[0]} {icon.icon[1]}"
 				class="w-fit h-full fill-current shrink-0"
 			>
-				<path d={icon.icon[4]} />
+				{#each paths as pathData}
+					<path d={pathData} />
+				{/each}
 			</svg>
 		</button>
 	</div>
 	{#if menuOpen}
-		<div
-			transition:slide={{ duration: 150 }}
-			class="flex flex-col w-full h-fit p-2 transition-all duration-150 ease-in-out bg-orange-500"
-		>
-			<span class="h-20 text-4xl primaryText">{tracks.currentOrder}</span>
-		</div>
+		<AdvancedSortMenu {tracks}></AdvancedSortMenu>
 	{/if}
 </div>
