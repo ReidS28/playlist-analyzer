@@ -4,6 +4,8 @@
 
 	import type { MouseEventHandler } from "svelte/elements";
 	import type { OrderedTrackList } from "../../lib/orderedTrackList.svelte";
+	import FaIcon from "../ui/FaIcon.svelte";
+	import { icon } from "@fortawesome/fontawesome-svg-core";
 
 	interface Props {
 		sortOrder: string;
@@ -30,16 +32,9 @@
 	{@render children?.()}
 
 	{#if tracks?.getOrderBase() == sortOrder}
-		{@const icon = tracks?.getOrderReversed() ? faArrowDown : faArrowUp}
-		{@const paths = Array.isArray(icon.icon[4]) ? icon.icon[4] : [icon.icon[4]]}
-
-		<svg
-			viewBox="0 0 {icon.icon[0]} {icon.icon[1]}"
-			class="w-3 h-3 fill-current shrink-0"
-		>
-			{#each paths as pathData}
-				<path d={pathData} />
-			{/each}
-		</svg>
+		<FaIcon
+			icon={tracks?.getOrderReversed() ? faArrowDown : faArrowUp}
+			class="w-3 h-3"
+		></FaIcon>
 	{/if}
 </button>
