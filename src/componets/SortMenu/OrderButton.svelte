@@ -22,8 +22,10 @@
 <button
 	type="button"
 	onclick={() => tracks.sort(sortOrder)}
-	class="inline-flex items-center gap-1.5 relative isolate shrink-0 overflow-hidden bg-sp-dark-grey px-3 py-1 rounded-full hover:bg-sp-green/40 {className}"
-	class:bg-sp-green={tracks?.getOrderBase() == sortOrder}
+	class="inline-flex items-center gap-1.5 relative isolate shrink-0 overflow-hidden bg-sp-dark-grey px-3 py-1 rounded-full {tracks?.getOrderBase() ===
+	sortOrder
+		? 'bg-sp-green'
+		: 'bg-sp-dark-grey hover:bg-sp-green/40'} {className}"
 >
 	{@render children?.()}
 
