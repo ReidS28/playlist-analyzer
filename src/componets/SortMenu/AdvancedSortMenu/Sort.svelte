@@ -1,8 +1,13 @@
 <script lang="ts">
 	import { slide } from "svelte/transition";
 	import type { Snippet } from "svelte";
-	import { faSort } from "@fortawesome/free-solid-svg-icons";
+	import {
+		faSort,
+		faArrowUp,
+		faArrowDown,
+	} from "@fortawesome/free-solid-svg-icons";
 	import FaIcon from "../../ui/FaIcon.svelte";
+	import Trait from "./Trait.svelte";
 
 	interface Props {
 		class?: string;
@@ -11,7 +16,8 @@
 
 	let { class: className, children }: Props = $props();
 
-	let sortOrder: string | undefined = $state();
+	let sortOrder: string | undefined = $state("");
+	let reversed: boolean = $state(false);
 </script>
 
 <div
@@ -21,8 +27,18 @@
 		icon={faSort}
 		class="w-fit h-4/5"
 	></FaIcon>
-	<div
-		class="flex flex-row w-full h-full border-[1.5px] border-sp-light-grey rounded bg-sp-grey"
-		class:border-dashed={!sortOrder}
-	>{sortOrder}</div>
+	<Trait
+		{sortOrder}
+		class="m-auto"
+	></Trait>
+
+	<button
+        onclick={() => {reversed = !reversed}}
+		class="h-full aspect-square shrink-0 rounded-sm items-center hover:bg-sp-green/40 bg-sp-grey"
+	>
+		<FaIcon
+			icon={!reversed? faArrowUp : faArrowDown}
+			class="w-fit h-4/5 m-auto"
+		></FaIcon>
+	</button>
 </div>
