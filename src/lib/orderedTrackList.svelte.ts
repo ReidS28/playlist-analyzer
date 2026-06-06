@@ -1,5 +1,14 @@
 import type { PlaylistedTrack, TrackItem } from "@spotify/web-api-ts-sdk";
 
+type TrackTraitSelector = (
+	track: PlaylistedTrack,
+) => string | number | undefined | null;
+
+type TrackTrait = {
+	selector: TrackTraitSelector;
+	reverse?: boolean;
+};
+
 export class OrderedTrackList {
 	private getTracks: () => Promise<PlaylistedTrack[]> | null;
 
@@ -37,10 +46,7 @@ export class OrderedTrackList {
 	}
 
 	public async sort(sortOrder = "custom"): Promise<void> {
-		let compare: (
-			a: PlaylistedTrack<TrackItem>,
-			b: PlaylistedTrack<TrackItem>,
-		) => number = (a, b) => 0;
+		let traits: TrackTrait | TrackTrait[] = { selector: (track) => undefined };
 
 		const sortOrderBase = this.getOrderBase(sortOrder);
 		const sortOrderReversed = this.getOrderReversed(sortOrder);
@@ -66,19 +72,23 @@ export class OrderedTrackList {
 			}
 			return;
 		} else if (sortOrderBase == "name") {
-			compare = this.compareName;
+			traits = { selector: this.getName };
 		} else if (sortOrderBase == "artist") {
-			compare = this.compareArtistName;
+			traits = [{ selector: this.getArtistName }, { selector: this.getName }];
 		} else if (sortOrderBase == "length") {
-			compare = this.compareLength;
+			traits = { selector: this.getLength };
 		} else if (sortOrderBase == "dateAdded") {
-			compare = this.compareDateAdded;
+			traits = { selector: this.getDateAdded };
+		}
+
+		if (!Array.isArray(traits)) {
+			traits = [traits];
 		}
 
 		if (!sortOrderReversed) {
-			this.arrangedTracks.sort((a, b) => compare(a, b));
+			this.arrangedTracks.sort((a, b) => this.compare(a, b, ...traits));
 		} else {
-			this.arrangedTracks.sort((a, b) => -compare(a, b));
+			this.arrangedTracks.sort((a, b) => -this.compare(a, b, ...traits));
 		}
 
 		this.currentOrder = sortOrder;
@@ -89,32 +99,53 @@ export class OrderedTrackList {
 		await this.resetOrder();
 		for (let i = this.arrangedTracks.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1));
-			[this.arrangedTracks[i], this.arrangedTracks[j]] = [this.arrangedTracks[j], this.arrangedTracks[i]];
+			[this.arrangedTracks[i], this.arrangedTracks[j]] = [
+				this.arrangedTracks[j],
+				this.arrangedTracks[i],
+			];
 		}
 	}
 
-	public compareName = (a: PlaylistedTrack, b: PlaylistedTrack): number => {
-		return (a?.item.name || "").localeCompare(b?.item.name || "");
-	};
-
-	public compareArtistName = (
+	public compare = (
 		a: PlaylistedTrack,
 		b: PlaylistedTrack,
+		...traits: TrackTrait[]
 	): number => {
-		const d = (a?.item.artists[0].name || "").localeCompare(
-			b?.item.artists[0].name || "",
-		);
-		return d != 0 ? d : this.compareName(a, b);
+		for (const trait of traits) {
+			const valA = trait.selector(a);
+			const valB = trait.selector(b);
+
+			let result = 0;
+
+			if (typeof valA === "number" || typeof valB === "number") {
+				result = ((valA as number) ?? 0) - ((valB as number) ?? 0);
+			} else {
+				const strA = valA?.toString() ?? "";
+				const strB = valB?.toString() ?? "";
+				result = strA.localeCompare(strB);
+			}
+
+			if (result !== 0) {
+				return trait.reverse ? -result : result;
+			}
+		}
+
+		return 0;
 	};
 
-	public compareLength = (a: PlaylistedTrack, b: PlaylistedTrack): number => {
-		return (a?.item?.duration_ms || 0) - (b?.item?.duration_ms || 0);
+	public getName = (track: PlaylistedTrack): string | undefined => {
+		return track?.item?.name;
 	};
 
-	public compareDateAdded = (
-		a: PlaylistedTrack,
-		b: PlaylistedTrack,
-	): number => {
-		return (a?.added_at || "").localeCompare(b?.added_at || "");
+	public getArtistName = (track: PlaylistedTrack): string | undefined => {
+		return track?.item?.artists[0]?.name;
+	};
+
+	public getLength = (track: PlaylistedTrack): number | undefined => {
+		return track?.item?.duration_ms;
+	};
+
+	public getDateAdded = (track: PlaylistedTrack): string | undefined => {
+		return track?.added_at;
 	};
 }
