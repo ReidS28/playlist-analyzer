@@ -18,18 +18,18 @@ export class OrderedTrackList {
 	public constructor(getTracks: () => Promise<PlaylistedTrack[]> | null) {
 		this.getTracks = getTracks;
 
-		$inspect(this.currentOrder);
+		//$inspect(this.currentOrder);
 
 		$effect(() => {
 			this.resetOrder();
 		});
 	}
 
-	public getOrderBase(sortOrder = this.currentOrder): string {
-		return sortOrder.split(".", 1)[0];
+	public getTraitBase(sortOrder = this.currentOrder): string {
+		return sortOrder.split(",", 1)[0].split(".", 1)[0];
 	}
 
-	public getOrderReversed(sortOrder = this.currentOrder): boolean {
+	public getTraitReversed(sortOrder = this.currentOrder): boolean {
 		return sortOrder.includes(".reversed");
 	}
 
@@ -39,59 +39,59 @@ export class OrderedTrackList {
 			if (!tracks) return;
 			const actualTracks = await tracks;
 			this.arrangedTracks = [...actualTracks];
-			this.currentOrder = "custom";
 		} catch (error) {
 			console.error("Failed to reset track order:", error);
 		}
 	}
 
-	public async sort(sortOrder = "custom"): Promise<void> {
-		let traits: TrackTrait | TrackTrait[] = { selector: (track) => undefined };
+	public async order(orderKey: string = "custom"): Promise<void> {
+		console.log(`order() orderKey: ${orderKey}`);
 
-		const sortOrderBase = this.getOrderBase(sortOrder);
-		const sortOrderReversed = this.getOrderReversed(sortOrder);
+		const sortOrderBase = this.getTraitBase(orderKey);
+		const sortOrderReversed = this.getTraitReversed(orderKey);
 
-		if (this.getOrderBase() == sortOrderBase && !sortOrderReversed) {
-			this.arrangedTracks.reverse();
-			if (this.getOrderReversed()) {
-				this.currentOrder = this.currentOrder.replace(".reversed", "");
-			} else {
-				this.currentOrder += ".reversed";
-			}
-			return;
+		if (this.getTraitBase(orderKey) == "advanced") {
+			console.log("a");
+			const next = orderKey.replace("advanced.", "").slice(1, -1);
+			console.log(`Next: ${next}`);
+			await this.sort(next);
 		} else {
-			await this.resetOrder();
-			if (!this.arrangedTracks || this.arrangedTracks.length === 0) return;
+			console.log("b");
+			await this.sort(orderKey);
 		}
+		this.currentOrder = orderKey;
+	}
 
-		if (sortOrderBase == "custom") {
-			await this.resetOrder();
-			if (sortOrderReversed) {
-				this.arrangedTracks.reverse();
-				this.currentOrder += ".reversed";
+	public async sort(traitsKey = "custom"): Promise<void> {
+		const splitTraitsKey = traitsKey.split(",");
+
+		console.log(`sort() splitOrderKey: ${splitTraitsKey}`);
+		let traits: TrackTrait[] = [];
+
+		for (const traitKey of splitTraitsKey) {
+			const traitBase = this.getTraitBase(traitKey);
+			const traitReversed = this.getTraitReversed(traitKey);
+
+			if (traitBase == "custom") {
+				await this.resetOrder();
+				if (traitReversed) {
+					this.arrangedTracks.reverse();
+					this.currentOrder += ".reversed";
+				}
+				return;
+			} else if (traitBase == "name") {
+				traits.push({ selector: this.getName, reverse: traitReversed });
+			} else if (traitBase == "artist") {
+				traits.push({ selector: this.getArtistName, reverse: traitReversed });
+			} else if (traitBase == "length") {
+				traits.push({ selector: this.getLength, reverse: traitReversed });
+			} else if (traitBase == "dateAdded") {
+				traits.push({ selector: this.getDateAdded, reverse: traitReversed });
 			}
-			return;
-		} else if (sortOrderBase == "name") {
-			traits = { selector: this.getName };
-		} else if (sortOrderBase == "artist") {
-			traits = [{ selector: this.getArtistName }, { selector: this.getName }];
-		} else if (sortOrderBase == "length") {
-			traits = { selector: this.getLength };
-		} else if (sortOrderBase == "dateAdded") {
-			traits = { selector: this.getDateAdded };
 		}
 
-		if (!Array.isArray(traits)) {
-			traits = [traits];
-		}
+		this.arrangedTracks.sort((a, b) => this.compare(a, b, ...traits));
 
-		if (!sortOrderReversed) {
-			this.arrangedTracks.sort((a, b) => this.compare(a, b, ...traits));
-		} else {
-			this.arrangedTracks.sort((a, b) => -this.compare(a, b, ...traits));
-		}
-
-		this.currentOrder = sortOrder;
 		return;
 	}
 

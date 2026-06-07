@@ -42,7 +42,7 @@
 		</OrderButton>
 
 		<OrderButton
-			sortOrder="artist"
+			sortOrder="artist,name"
 			{tracks}
 		>
 			Artist
@@ -71,7 +71,7 @@
 				}
 			}}
 			class="ml-auto px-3 bg-sp-dark-grey rounded-full hover:bg-sp-green/40"
-			class:bg-sp-green={tracks?.getOrderBase() == "advanced"}
+			class:bg-sp-green={tracks?.getTraitBase() == "advanced"}
 			aria-label="Open menu"
 		>
 			<svg

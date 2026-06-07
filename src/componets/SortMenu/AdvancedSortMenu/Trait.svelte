@@ -1,12 +1,12 @@
 <script lang="ts">
 	interface Props {
-		sortOrder?: string | undefined;
+		traitKey?: string | undefined;
 		class?: string;
 	}
 
-	let { sortOrder, class: className }: Props = $props();
+	let { traitKey, class: className }: Props = $props();
 
-    let validOrder: boolean = $derived(!sortOrder)
+	let validOrder: boolean = $derived(!traitKey);
 </script>
 
 <div class={className}>
@@ -18,7 +18,7 @@
 		{#if validOrder}
 			Select a trait
 		{:else}
-			{sortOrder}
+			{traitKey}
 		{/if}
 	</div>
 </div>

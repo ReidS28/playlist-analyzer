@@ -10,25 +10,24 @@
 	import Trait from "./Trait.svelte";
 
 	interface Props {
-        sortOrder?: string | undefined;
+		sortOrder?: string | undefined;
 		class?: string;
-		children?: Snippet;
 	}
 
-	let {  sortOrder, class: className, children }: Props = $props();
+	let { sortOrder, class: className }: Props = $props();
 
 	let reversed: boolean = $state(false);
 </script>
 
 <div
-	class="flex flex-row p-1 gap-2 w-full h-8 items-center rounded-sm shrink-0 bg-sp-med-dark-grey"
+	class="flex flex-row p-1 gap-2 w-full h-8 items-center rounded-sm shrink-0 bg-sp-med-dark-grey {className}"
 >
 	<FaIcon
 		icon={faSort}
 		class="w-fit h-4/5 shrink-0"
 	></FaIcon>
 	<Trait
-		{sortOrder}
+		traitKey={sortOrder}
 		class="flex-1 m-auto min-w-0"
 	></Trait>
 	<button

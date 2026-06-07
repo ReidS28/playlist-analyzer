@@ -23,16 +23,18 @@
 		<div
 			class="flex flex-col gap-1 w-full h-full p-1 overflow-x-hidden overflow-y-auto scrollbar-thumb-sp-light-grey bg-sp-dark-grey"
 		>
-			<Sort sortOrder={"name"} >Sort</Sort>
-			<Sort>Sort</Sort>
-			<Sort sortOrder="date added">Sort</Sort>
+			<Sort sortOrder={"name"}></Sort>
+			<Sort></Sort>
+			<Sort sortOrder="date added"></Sort>
 		</div>
 		<div class="flex flex-row gap-1 w-full h-12 p-1 mt-auto bg-sp-black">
 			<AdvancedSortButtonSquare>+</AdvancedSortButtonSquare>
 			<AdvancedSortButtonSquare>-</AdvancedSortButtonSquare>
 			<AdvancedSortButtonSquare>⮝</AdvancedSortButtonSquare>
 			<AdvancedSortButtonSquare>⮟</AdvancedSortButtonSquare>
-			<AdvancedSortButtonSquare class="ml-auto">✔</AdvancedSortButtonSquare>
+			<AdvancedSortButtonSquare onclick={() => {
+				tracks.order("advanced.[artist,name.reversed]")
+			}} class="ml-auto">✔</AdvancedSortButtonSquare>
 		</div>
 	</div>
 	<div class="flex flex-col gap-1 w-full bg-red-500-">
@@ -41,18 +43,18 @@
 			<div
 				class="flex flex-row flex-wrap *:w-fit gap-1 w-full h-fit bg-orange-500-"
 			>
-				<Trait sortOrder={"name"}></Trait>
-				<Trait sortOrder={"artist"}></Trait>
-				<Trait sortOrder={"length"}></Trait>
-				<Trait sortOrder={"date added"}></Trait>
-				<Trait sortOrder={"eeeeeee"}></Trait>
-				<Trait sortOrder={"eeeeee"}></Trait>
-				<Trait sortOrder={"eeeeeeee"}></Trait>
-				<Trait sortOrder={"eeeeeeeeeee"}></Trait>
-				<Trait sortOrder={"eeeeee"}></Trait>
-				<Trait sortOrder={"eeeeeeeee"}></Trait>
-				<Trait sortOrder={"eeeeeee"}></Trait>
-				<Trait sortOrder={"ee"}></Trait>
+				<Trait traitKey={"name"}></Trait>
+				<Trait traitKey={"artist"}></Trait>
+				<Trait traitKey={"length"}></Trait>
+				<Trait traitKey={"date added"}></Trait>
+				<Trait traitKey={"eeeeeee"}></Trait>
+				<Trait traitKey={"eeeeee"}></Trait>
+				<Trait traitKey={"eeeeeeee"}></Trait>
+				<Trait traitKey={"eeeeeeeeeee"}></Trait>
+				<Trait traitKey={"eeeeee"}></Trait>
+				<Trait traitKey={"eeeeeeeee"}></Trait>
+				<Trait traitKey={"eeeeeee"}></Trait>
+				<Trait traitKey={"ee"}></Trait>
 			</div>
 		</div>
 	</div>

@@ -124,7 +124,7 @@
 			{#each tracks.arrangedTracks as track}
 				<TrackBar
 					data={track}
-					baseCurrentOrder={tracks.getOrderBase()}
+					baseCurrentOrder={tracks.getTraitBase()}
 				></TrackBar>
 			{/each}
 		{:else}

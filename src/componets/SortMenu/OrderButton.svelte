@@ -19,21 +19,24 @@
 		class: className = "",
 		children = undefined,
 	}: Props = $props();
+
+	let selected = $derived(
+		tracks?.getTraitBase() == tracks?.getTraitBase(sortOrder),
+	);
 </script>
 
 <button
 	type="button"
-	onclick={() => tracks.sort(sortOrder)}
-	class="inline-flex items-center gap-1.5 relative isolate shrink-0 overflow-hidden bg-sp-dark-grey px-3 py-1 rounded-full {tracks?.getOrderBase() ===
-	sortOrder
+	onclick={() => tracks.order(sortOrder)}
+	class="inline-flex items-center gap-1.5 relative isolate shrink-0 overflow-hidden bg-sp-dark-grey px-3 py-1 rounded-full {selected
 		? 'bg-sp-green'
 		: 'bg-sp-dark-grey hover:bg-sp-green/40'} {className}"
 >
 	{@render children?.()}
 
-	{#if tracks?.getOrderBase() == sortOrder}
+	{#if selected}
 		<FaIcon
-			icon={tracks?.getOrderReversed() ? faArrowDown : faArrowUp}
+			icon={tracks?.getTraitReversed() ? faArrowDown : faArrowUp}
 			class="w-3 h-3"
 		></FaIcon>
 	{/if}
