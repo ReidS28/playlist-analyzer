@@ -70,9 +70,8 @@
 				if (!navbarShrunk) {
 				}
 			}}
-			class="ml-auto px-3 bg-sp-dark-grey rounded-full hover:bg-sp-green/40"
-			class:bg-sp-green={tracks?.getTraitBase() == "advanced"}
-			aria-label="Open menu"
+			class="ml-auto px-3 bg-sp-dark-grey rounded-full {tracks?.getTraitBase() == "advanced" ? "bg-sp-green" : "hover:bg-sp-green/40 bg-sp-med-dark-grey"}"
+			aria-label="Advanced Order Menu"
 		>
 			<svg
 				viewBox="0 0 {icon.icon[0]} {icon.icon[1]}"

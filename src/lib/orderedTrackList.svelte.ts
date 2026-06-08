@@ -25,12 +25,12 @@ export class OrderedTrackList {
 		});
 	}
 
-	public getTraitBase(sortOrder = this.currentOrder): string {
-		return sortOrder.split(",", 1)[0].split(".", 1)[0];
+	public getTraitBase(traitsKey = this.currentOrder): string {
+		return traitsKey.split(",", 1)[0].split(".", 1)[0];
 	}
 
-	public getTraitReversed(sortOrder = this.currentOrder): boolean {
-		return sortOrder.includes(".reversed");
+	public getTraitReversed(traitsKey = this.currentOrder): boolean {
+		return traitsKey.includes(".reversed");
 	}
 
 	public async resetOrder(): Promise<void> {
@@ -45,18 +45,24 @@ export class OrderedTrackList {
 	}
 
 	public async order(orderKey: string = "custom"): Promise<void> {
-		console.log(`order() orderKey: ${orderKey}`);
-
-		const sortOrderBase = this.getTraitBase(orderKey);
-		const sortOrderReversed = this.getTraitReversed(orderKey);
-
 		if (this.getTraitBase(orderKey) == "advanced") {
-			console.log("a");
-			const next = orderKey.replace("advanced.", "").slice(1, -1);
-			console.log(`Next: ${next}`);
+			const next = orderKey.replace("advanced.", "").slice(1, -1); // Remove Brackets
 			await this.sort(next);
 		} else {
-			console.log("b");
+			// Toggle reverse for the first trait if the traits are the same as before and reverse isn't specified
+			const firstTraitReversed = this.getTraitReversed(orderKey);
+			if (
+				orderKey.replaceAll("reversed", "") ===
+					this.currentOrder.replaceAll("reversed", "") &&
+				!this.getTraitReversed() &&
+				!firstTraitReversed
+			) {
+				const traits = orderKey.split(",");
+				if (traits.length > 0 && !traits[0].endsWith(".reversed")) {
+					traits[0] += ".reversed";
+				}
+				orderKey = `${traits.join(",")}`;
+			}
 			await this.sort(orderKey);
 		}
 		this.currentOrder = orderKey;
@@ -65,7 +71,6 @@ export class OrderedTrackList {
 	public async sort(traitsKey = "custom"): Promise<void> {
 		const splitTraitsKey = traitsKey.split(",");
 
-		console.log(`sort() splitOrderKey: ${splitTraitsKey}`);
 		let traits: TrackTrait[] = [];
 
 		for (const traitKey of splitTraitsKey) {
@@ -76,7 +81,6 @@ export class OrderedTrackList {
 				await this.resetOrder();
 				if (traitReversed) {
 					this.arrangedTracks.reverse();
-					this.currentOrder += ".reversed";
 				}
 				return;
 			} else if (traitBase == "name") {

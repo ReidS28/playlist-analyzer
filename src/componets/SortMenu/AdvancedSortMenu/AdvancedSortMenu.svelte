@@ -32,9 +32,13 @@
 			<AdvancedSortButtonSquare>-</AdvancedSortButtonSquare>
 			<AdvancedSortButtonSquare>⮝</AdvancedSortButtonSquare>
 			<AdvancedSortButtonSquare>⮟</AdvancedSortButtonSquare>
-			<AdvancedSortButtonSquare onclick={() => {
-				tracks.order("advanced.[artist,name.reversed]")
-			}} class="ml-auto">✔</AdvancedSortButtonSquare>
+			<AdvancedSortButtonSquare
+				onclick={() => {
+					tracks.order("advanced.[artist,name.reversed]");
+				}}
+				selected={tracks?.getTraitBase() === "advanced"}
+				class="ml-auto">✔</AdvancedSortButtonSquare
+			>
 		</div>
 	</div>
 	<div class="flex flex-col gap-1 w-full bg-red-500-">
