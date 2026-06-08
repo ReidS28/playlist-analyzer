@@ -6,6 +6,7 @@
 	import SortingGroup from "./Group.svelte";
 	import Sort from "./Sort.svelte";
 	import Trait from "./Trait.svelte";
+	import Group from "./Group.svelte";
 
 	interface Props {
 		tracks: OrderedTrackList;
@@ -23,9 +24,9 @@
 		<div
 			class="flex flex-col gap-1 w-full h-full p-1 overflow-x-hidden overflow-y-auto scrollbar-thumb-sp-light-grey bg-sp-dark-grey"
 		>
-			<Sort sortOrder={"name"}></Sort>
+			<Group traitKey={"artist"}></Group>
 			<Sort></Sort>
-			<Sort sortOrder="date added"></Sort>
+			<Sort traitKey="date added"></Sort>
 		</div>
 		<div class="flex flex-row gap-1 w-full h-12 p-1 mt-auto bg-sp-black">
 			<AdvancedSortButtonSquare>+</AdvancedSortButtonSquare>

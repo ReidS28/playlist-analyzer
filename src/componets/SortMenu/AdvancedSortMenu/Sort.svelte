@@ -10,11 +10,11 @@
 	import Trait from "./Trait.svelte";
 
 	interface Props {
-		sortOrder?: string | undefined;
+		traitKey?: string | undefined;
 		class?: string;
 	}
 
-	let { sortOrder, class: className }: Props = $props();
+	let { traitKey, class: className }: Props = $props();
 
 	let reversed: boolean = $state(false);
 </script>
@@ -27,7 +27,7 @@
 		class="w-fit h-4/5 shrink-0"
 	></FaIcon>
 	<Trait
-		traitKey={sortOrder}
+		traitKey={traitKey}
 		class="flex-1 m-auto min-w-0"
 	></Trait>
 	<button
