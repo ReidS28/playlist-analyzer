@@ -26,13 +26,14 @@
 	let { tracks }: Props = $props();
 
 	let selectedOrder: {
+		id: number;
 		type: string;
 		orderComponent: orderComponentObj;
 	}[] = $state(
 		[
-			{ type: "group", orderComponent: { trait: ARTIST_TRAIT } },
-			{ type: "sort", orderComponent: { trait: BLANK_TRAIT } },
-			{ type: "sort", orderComponent: { trait: NAME_TRAIT } },
+			{ id: 1, type: "group", orderComponent: { trait: ARTIST_TRAIT } },
+			{ id: 2, type: "sort", orderComponent: { trait: BLANK_TRAIT } },
+			{ id: 3, type: "sort", orderComponent: { trait: NAME_TRAIT } },
 		].map((item) => {
 			const updatedOrder = {
 				...item.orderComponent,
@@ -55,7 +56,7 @@
 			};
 		}),
 	);
-	let selectedOrderActiveIndex: number = $state(-1);
+	let selectedOrderActiveId: number = $state(-1);
 
 	$effect(() => {
 		const advancedKey = getAdvancedOrderKey();
@@ -67,22 +68,24 @@
 	});
 
 	function moveTraitUp() {
-		const index = selectedOrderActiveIndex;
+		const index = selectedOrder.findIndex(
+			(item) => item.id === selectedOrderActiveId,
+		);
 		if (index > 0) {
 			const temp = selectedOrder[index];
 			selectedOrder[index] = selectedOrder[index - 1];
 			selectedOrder[index - 1] = temp;
-			selectedOrderActiveIndex = index - 1;
 		}
 	}
 
 	function moveTraitDown() {
-		const index = selectedOrderActiveIndex;
+		const index = selectedOrder.findIndex(
+			(item) => item.id === selectedOrderActiveId,
+		);
 		if (index !== -1 && index < selectedOrder.length - 1) {
 			const temp = selectedOrder[index];
 			selectedOrder[index] = selectedOrder[index + 1];
 			selectedOrder[index + 1] = temp;
-			selectedOrderActiveIndex = index + 1;
 		}
 	}
 
@@ -117,10 +120,10 @@
 		<div
 			class="flex flex-col gap-1 w-full h-full p-1 overflow-x-hidden overflow-y-auto scrollbar-thumb-sp-light-grey bg-sp-dark-grey"
 		>
-			{#each selectedOrder as item, i}
+			{#each selectedOrder as item}
 				<button
 					type="button"
-					onclick={() => (selectedOrderActiveIndex = i)}
+					onclick={() => (selectedOrderActiveId = item.id)}
 					class="relative w-full text-left cursor-pointer block"
 				>
 					{#if item.type === "group"}
@@ -129,8 +132,8 @@
 						<Sort bind:sort={item.orderComponent as SortObj} />
 					{/if}
 					<div
-						class="absolute inset-0 pointer-events-none rounded-sm {selectedOrderActiveIndex ===
-						i
+						class="absolute inset-0 pointer-events-none rounded-sm {selectedOrderActiveId ===
+						item.id
 							? 'bg-sp-med-light-grey/26'
 							: ''}"
 					></div>
