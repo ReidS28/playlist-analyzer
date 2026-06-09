@@ -18,45 +18,47 @@
 		type orderComponentObj,
 		type GroupObj,
 		type SortObj,
+		type TraitObj,
 	} from "../../../lib/constants.svelte";
+	import { flip } from "svelte/animate";
 
 	interface Props {
 		tracks: OrderedTrackList;
 	}
 	let { tracks }: Props = $props();
 
-	let selectedOrder: {
-		id: number;
-		type: string;
+	function createItem(
+		type: "group" | "sort",
+		trait: TraitObj,
+	): {
+		id: `${string}-${string}-${string}-${string}-${string}`;
+		type: "group" | "sort";
 		orderComponent: orderComponentObj;
-	}[] = $state(
-		[
-			{ id: 1, type: "group", orderComponent: { trait: ARTIST_TRAIT } },
-			{ id: 2, type: "sort", orderComponent: { trait: BLANK_TRAIT } },
-			{ id: 3, type: "sort", orderComponent: { trait: NAME_TRAIT } },
-		].map((item) => {
-			const updatedOrder = {
-				...item.orderComponent,
+	} {
+		const isGroup = type === "group";
+		return {
+			id: crypto.randomUUID(),
+			type,
+			orderComponent: {
+				trait,
 				reversed: false,
-			};
+				...(isGroup && { groupBy: "firstLetter" as const }),
+			},
+		};
+	}
 
-			if (item.type === "group") {
-				return {
-					...item,
-					orderComponent: {
-						...updatedOrder,
-						groupBy: "firstLetter" as const,
-					},
-				};
-			}
-
-			return {
-				...item,
-				orderComponent: updatedOrder,
-			};
-		}),
-	);
-	let selectedOrderActiveId: number = $state(-1);
+	let selectedOrder: {
+		id: `${string}-${string}-${string}-${string}-${string}`;
+		type: "group" | "sort";
+		orderComponent: orderComponentObj;
+	}[] = $state([
+		createItem("group", ARTIST_TRAIT),
+		createItem("group", LENGTH_TRAIT),
+		createItem("sort", BLANK_TRAIT),
+		createItem("sort", NAME_TRAIT),
+	]);
+	let selectedOrderActiveId: `${string}-${string}-${string}-${string}-${string}` =
+		$state(crypto.randomUUID());
 
 	$effect(() => {
 		const advancedKey = getAdvancedOrderKey();
@@ -120,9 +122,10 @@
 		<div
 			class="flex flex-col gap-1 w-full h-full p-1 overflow-x-hidden overflow-y-auto scrollbar-thumb-sp-light-grey bg-sp-dark-grey"
 		>
-			{#each selectedOrder as item}
+			{#each selectedOrder as item, i (item.id)}
 				<button
 					type="button"
+					animate:flip={{ duration: 200 }}
 					onclick={() => (selectedOrderActiveId = item.id)}
 					class="relative w-full text-left cursor-pointer block"
 				>
