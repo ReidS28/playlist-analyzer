@@ -47,6 +47,7 @@ export class OrderedTrackList {
 	public async order(orderKey: string = "custom"): Promise<void> {
 		if (this.getTraitBase(orderKey) == "advanced") {
 			const next = orderKey.replace("advanced.", "").slice(1, -1); // Remove Brackets
+			console.log(`next: ${next}`)
 			await this.sort(next);
 		} else {
 			// Toggle reverse for the first trait if the traits are the same as before and reverse isn't specified
@@ -66,6 +67,7 @@ export class OrderedTrackList {
 			await this.sort(orderKey);
 		}
 		this.currentOrder = orderKey;
+		console.log(`Current Track Order: ${this.currentOrder}`)
 	}
 
 	public async sort(traitsKey = "custom"): Promise<void> {

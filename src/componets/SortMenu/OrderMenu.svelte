@@ -70,7 +70,7 @@
 				if (!navbarShrunk) {
 				}
 			}}
-			class="ml-auto px-3 bg-sp-dark-grey rounded-full {tracks?.getTraitBase() == "advanced" ? "bg-sp-green" : "hover:bg-sp-green/40 bg-sp-med-dark-grey"}"
+			class="ml-auto px-3 rounded-full {tracks?.getTraitBase() == "advanced" ? "bg-sp-green" : "hover:bg-sp-green/40 bg-sp-dark-grey"}"
 			aria-label="Advanced Order Menu"
 		>
 			<svg

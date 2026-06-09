@@ -8,15 +8,14 @@
 	} from "@fortawesome/free-solid-svg-icons";
 	import FaIcon from "../../ui/FaIcon.svelte";
 	import Trait from "./Trait.svelte";
+	import type { GroupObj } from "../../../lib/constants.svelte";
 
 	interface Props {
-		traitKey?: string | undefined;
+		group: GroupObj;
 		class?: string;
 	}
 
-	let { traitKey, class: className }: Props = $props();
-
-	let reversed: boolean = $state(false);
+	let { group = $bindable(), class: className }: Props = $props();
 </script>
 
 <div
@@ -27,17 +26,18 @@
 		class="w-fit h-4/5 shrink-0"
 	></FaIcon>
 	<Trait
-		traitKey={traitKey}
+		traitKey={group.trait.traitKey}
 		class="flex-1 m-auto min-w-0"
 	></Trait>
 	<button
-		onclick={() => {
-			reversed = !reversed;
+		onclick={(e) => {
+			e.stopPropagation();
+			group.reversed = !group.reversed;
 		}}
 		class="h-full aspect-square shrink-0 rounded-sm items-center hover:bg-sp-green/40 bg-sp-grey"
 	>
 		<FaIcon
-			icon={!reversed ? faArrowUp : faArrowDown}
+			icon={!group.reversed ? faArrowUp : faArrowDown}
 			class="w-fit h-4/5 m-auto"
 		></FaIcon>
 	</button>
