@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { flip } from "svelte/animate";
 
 	import { OrderedTrackList } from "../lib/orderedTrackList.svelte";
 
@@ -73,7 +74,7 @@
 		bind:this={observerTarget}
 		class="absolute top-0 h-5 w-0 pointer-events-none"
 	></div>
-	<div class="flex flex-col sticky top-0 h-fit">
+	<div class="flex flex-col sticky z-1 top-0 h-fit">
 		<div
 			class="flex flex-row p-2 gap-2 min-h-20 w-full shrink overflow-hidden transition-all ease-in-out bg-sp-dark-grey bg-red-500-"
 			class:h-40={!navbarShrunk}
@@ -119,13 +120,18 @@
 			{scrollVelocity}
 		></OrderMenu>
 	</div>
-	<ul class="flex flex-col gap-1 p-1 w-full h-full *:shrink-0 *:w-full *:h-20">
+	<ul class="flex flex-col gap-1 p-1 w-full h-full">
 		{#if tracks.arrangedTracks}
-			{#each tracks.arrangedTracks as track}
-				<TrackBar
-					data={track}
-					baseCurrentOrder={tracks.getTraitBase()}
-				></TrackBar>
+			{#each tracks.arrangedTracks as track (track.item.id)}
+				<div
+					class="*:shrink-0 *:w-full *:h-20"
+					animate:flip={{ duration: 500 }}
+				>
+					<TrackBar
+						data={track}
+						baseCurrentOrder={tracks.getTraitBase()}
+					></TrackBar>
+				</div>
 			{/each}
 		{:else}
 			<p>Loading tracks...</p>

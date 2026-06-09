@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { slide } from "svelte/transition";
+	import { flip } from "svelte/animate";
 	import { untrack } from "svelte";
 
 	import type { OrderedTrackList } from "../../../lib/orderedTrackList.svelte";
@@ -20,7 +21,6 @@
 		type SortObj,
 		type TraitObj,
 	} from "../../../lib/constants.svelte";
-	import { flip } from "svelte/animate";
 
 	interface Props {
 		tracks: OrderedTrackList;
