@@ -49,7 +49,7 @@ export class OrderedTrackList {
 
 		$effect(() => {
 			this.resetOrder();
-		});	
+		});
 	}
 
 	public createAdvancedOrderItem(
@@ -70,6 +70,38 @@ export class OrderedTrackList {
 				...(isGroup && { groupBy: "firstLetter" as const }),
 			},
 		};
+	}
+
+	public findAdvancedOrderIndexFromId(
+		id: `${string}-${string}-${string}-${string}-${string}` = this
+			.advancedOrderActiveId,
+	) {
+		return this.advancedOrder.findIndex((item) => item.id === id);
+	}
+
+	public removeAdvancedOrderItem(
+		id: `${string}-${string}-${string}-${string}-${string}` = this
+			.advancedOrderActiveId,
+	) {
+		this.advancedOrder.splice(this.findAdvancedOrderIndexFromId(id));
+	}
+
+	public moveAdvancedOrderItemUp(id: `${string}-${string}-${string}-${string}-${string}` = this.advancedOrderActiveId) {
+		const index = this.findAdvancedOrderIndexFromId(id);
+		if (index > 0) {
+			const temp = this.advancedOrder[index];
+			this.advancedOrder[index] = this.advancedOrder[index - 1];
+			this.advancedOrder[index - 1] = temp;
+		}
+	}
+
+	public moveAdvancedOrderItemDown(id: `${string}-${string}-${string}-${string}-${string}` = this.advancedOrderActiveId) {
+		const index = this.findAdvancedOrderIndexFromId(id);
+		if (index !== -1 && index < this.advancedOrder.length - 1) {
+			const temp = this.advancedOrder[index];
+			this.advancedOrder[index] = this.advancedOrder[index + 1];
+			this.advancedOrder[index + 1] = temp;
+		}
 	}
 
 	public getTraitBase(traitsKey = this.currentOrder): string {
@@ -94,7 +126,7 @@ export class OrderedTrackList {
 	public async order(orderKey: string = "custom"): Promise<void> {
 		if (this.getTraitBase(orderKey) == "advanced") {
 			const next = orderKey.replace("advanced.", "").slice(1, -1); // Remove Brackets
-			console.log(`next: ${next}`);
+			//console.log(`next: ${next}`);
 			await this.sort(next);
 		} else {
 			// Toggle reverse for the first trait if the traits are the same as before and reverse isn't specified

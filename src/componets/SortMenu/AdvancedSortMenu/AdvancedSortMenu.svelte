@@ -56,28 +56,6 @@
 		});
 	});
 
-	function moveTraitUp() {
-		const index = tracks.advancedOrder.findIndex(
-			(item) => item.id === tracks.advancedOrderActiveId,
-		);
-		if (index > 0) {
-			const temp = tracks.advancedOrder[index];
-			tracks.advancedOrder[index] = tracks.advancedOrder[index - 1];
-			tracks.advancedOrder[index - 1] = temp;
-		}
-	}
-
-	function moveTraitDown() {
-		const index = tracks.advancedOrder.findIndex(
-			(item) => item.id === tracks.advancedOrderActiveId,
-		);
-		if (index !== -1 && index < tracks.advancedOrder.length - 1) {
-			const temp = tracks.advancedOrder[index];
-			tracks.advancedOrder[index] = tracks.advancedOrder[index + 1];
-			tracks.advancedOrder[index + 1] = temp;
-		}
-	}
-
 	function getAdvancedOrderKey() {
 		const orderKeySegments = tracks.advancedOrder
 			.filter((item) => item.orderComponent.trait.traitKey !== undefined)
@@ -130,13 +108,15 @@
 				</button>
 			{/each}
 		</div>
-		<div class="flex flex-row gap-1 w-full h-10 shrink-0 p-1 mt-auto bg-sp-black">
+		<div
+			class="flex flex-row gap-1 w-full h-10 shrink-0 p-1 mt-auto bg-sp-black"
+		>
 			<AdvancedSortButtonSquare>+</AdvancedSortButtonSquare>
 			<AdvancedSortButtonSquare>-</AdvancedSortButtonSquare>
-			<AdvancedSortButtonSquare onclick={moveTraitUp}
+			<AdvancedSortButtonSquare onclick={() => {tracks.moveAdvancedOrderItemUp()}}
 				>⮝</AdvancedSortButtonSquare
 			>
-			<AdvancedSortButtonSquare onclick={moveTraitDown}
+			<AdvancedSortButtonSquare onclick={() => {tracks.moveAdvancedOrderItemDown()}}
 				>⮟</AdvancedSortButtonSquare
 			>
 			<AdvancedSortButtonSquare
