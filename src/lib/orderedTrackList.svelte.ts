@@ -54,7 +54,7 @@ export class OrderedTrackList {
 
 	public createAdvancedOrderItem(
 		type: "group" | "sort",
-		trait: TraitObj,
+		trait: TraitObj = BLANK_TRAIT,
 	): {
 		id: `${string}-${string}-${string}-${string}-${string}`;
 		type: "group" | "sort";
@@ -77,6 +77,30 @@ export class OrderedTrackList {
 			.advancedOrderActiveId,
 	) {
 		return this.advancedOrder.findIndex((item) => item.id === id);
+	}
+
+	public addAdvancedOrderItem(
+		item: {
+			id: `${string}-${string}-${string}-${string}-${string}`;
+			type: "group" | "sort";
+			orderComponent: orderComponentObj;
+		},
+		afterId: `${string}-${string}-${string}-${string}-${string}` = this
+			.advancedOrderActiveId,
+		selectOnAdd: boolean = true,
+	) {
+		let index = this.findAdvancedOrderIndexFromId(afterId) + 1;
+		if (index === 0) {
+			index = this.advancedOrder.length;
+		} else {
+		}
+		this.advancedOrder.splice(index, 0, item);
+		if (selectOnAdd) {
+			const nextIndex = Math.min(index, this.advancedOrder.length - 1);
+			if (nextIndex >= 0) {
+				this.advancedOrderActiveId = this.advancedOrder[nextIndex].id;
+			}
+		}
 	}
 
 	public removeAdvancedOrderItem(

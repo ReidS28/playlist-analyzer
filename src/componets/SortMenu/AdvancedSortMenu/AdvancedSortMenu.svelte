@@ -115,7 +115,33 @@
 		<div
 			class="flex flex-row gap-1 w-full h-10 shrink-0 p-1 mt-auto bg-sp-black"
 		>
-			<AdvancedSortButtonSquare>+</AdvancedSortButtonSquare>
+			{#snippet addAdvancedOrderItemMenu()}
+				<div
+					class="w-fit rounded bg-sp-med-light-grey p-0.5 shadow-xl flex flex-col gap-1 *:px-1 *:py-0.5 *:items-center *:text-left *:text-sm *:bg-sp-grey *:hover:bg-sp-green/40 *:rounded"
+				>
+					<button
+						onclick={() => {
+							tracks.addAdvancedOrderItem(
+								tracks.createAdvancedOrderItem("sort"),
+							);
+						}}
+					>
+						Sort
+					</button>
+					<button
+						onclick={() => {
+							tracks.addAdvancedOrderItem(
+								tracks.createAdvancedOrderItem("group"),
+							);
+						}}
+					>
+						Group
+					</button>
+				</div>
+			{/snippet}
+			<AdvancedSortButtonSquare menu={addAdvancedOrderItemMenu}
+				>+</AdvancedSortButtonSquare
+			>
 			<AdvancedSortButtonSquare
 				onclick={() => {
 					tracks.removeAdvancedOrderItem();
