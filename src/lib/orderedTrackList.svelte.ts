@@ -1,5 +1,18 @@
 import type { PlaylistedTrack, TrackItem } from "@spotify/web-api-ts-sdk";
 
+import {
+	ARTIST_TRAIT,
+	BLANK_TRAIT,
+	NAME_TRAIT,
+	ALBUM_TRAIT,
+	LENGTH_TRAIT,
+	DATE_ADDED_TRAIT,
+	type orderComponentObj,
+	type GroupObj,
+	type SortObj,
+	type TraitObj,
+} from "./constants.svelte";
+
 type TrackTraitSelector = (
 	track: PlaylistedTrack,
 ) => string | number | undefined | null;
@@ -15,6 +28,20 @@ export class OrderedTrackList {
 	public currentOrder = $state("custom");
 	public arrangedTracks: PlaylistedTrack[] = $state([]);
 
+	public advancedOrder: {
+		id: `${string}-${string}-${string}-${string}-${string}`;
+		type: "group" | "sort";
+		orderComponent: orderComponentObj;
+	}[] = $state([
+		this.createAdvancedOrderItem("group", ARTIST_TRAIT),
+		this.createAdvancedOrderItem("group", LENGTH_TRAIT),
+		this.createAdvancedOrderItem("sort", BLANK_TRAIT),
+		this.createAdvancedOrderItem("sort", NAME_TRAIT),
+		//this.createAdvancedOrderItem("sort", NAME_TRAIT),
+	]);
+	public advancedOrderActiveId: `${string}-${string}-${string}-${string}-${string}` =
+		$state("0-0-0-0-0");
+
 	public constructor(getTracks: () => Promise<PlaylistedTrack[]> | null) {
 		this.getTracks = getTracks;
 
@@ -23,6 +50,26 @@ export class OrderedTrackList {
 		$effect(() => {
 			this.resetOrder();
 		});
+	}
+
+	public createAdvancedOrderItem(
+		type: "group" | "sort",
+		trait: TraitObj,
+	): {
+		id: `${string}-${string}-${string}-${string}-${string}`;
+		type: "group" | "sort";
+		orderComponent: orderComponentObj;
+	} {
+		const isGroup = type === "group";
+		return {
+			id: crypto.randomUUID(),
+			type,
+			orderComponent: {
+				trait,
+				reversed: false,
+				...(isGroup && { groupBy: "firstLetter" as const }),
+			},
+		};
 	}
 
 	public getTraitBase(traitsKey = this.currentOrder): string {
@@ -47,7 +94,7 @@ export class OrderedTrackList {
 	public async order(orderKey: string = "custom"): Promise<void> {
 		if (this.getTraitBase(orderKey) == "advanced") {
 			const next = orderKey.replace("advanced.", "").slice(1, -1); // Remove Brackets
-			console.log(`next: ${next}`)
+			console.log(`next: ${next}`);
 			await this.sort(next);
 		} else {
 			// Toggle reverse for the first trait if the traits are the same as before and reverse isn't specified
@@ -67,7 +114,7 @@ export class OrderedTrackList {
 			await this.sort(orderKey);
 		}
 		this.currentOrder = orderKey;
-		console.log(`Current Track Order: ${this.currentOrder}`)
+		console.log(`Current Track Order: ${this.currentOrder}`);
 	}
 
 	public async sort(traitsKey = "custom"): Promise<void> {

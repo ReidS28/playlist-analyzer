@@ -47,19 +47,6 @@
 		};
 	}
 
-	let selectedOrder: {
-		id: `${string}-${string}-${string}-${string}-${string}`;
-		type: "group" | "sort";
-		orderComponent: orderComponentObj;
-	}[] = $state([
-		createItem("group", ARTIST_TRAIT),
-		createItem("group", LENGTH_TRAIT),
-		createItem("sort", BLANK_TRAIT),
-		createItem("sort", NAME_TRAIT),
-	]);
-	let selectedOrderActiveId: `${string}-${string}-${string}-${string}-${string}` =
-		$state(crypto.randomUUID());
-
 	$effect(() => {
 		const advancedKey = getAdvancedOrderKey();
 		untrack(() => {
@@ -70,29 +57,29 @@
 	});
 
 	function moveTraitUp() {
-		const index = selectedOrder.findIndex(
-			(item) => item.id === selectedOrderActiveId,
+		const index = tracks.advancedOrder.findIndex(
+			(item) => item.id === tracks.advancedOrderActiveId,
 		);
 		if (index > 0) {
-			const temp = selectedOrder[index];
-			selectedOrder[index] = selectedOrder[index - 1];
-			selectedOrder[index - 1] = temp;
+			const temp = tracks.advancedOrder[index];
+			tracks.advancedOrder[index] = tracks.advancedOrder[index - 1];
+			tracks.advancedOrder[index - 1] = temp;
 		}
 	}
 
 	function moveTraitDown() {
-		const index = selectedOrder.findIndex(
-			(item) => item.id === selectedOrderActiveId,
+		const index = tracks.advancedOrder.findIndex(
+			(item) => item.id === tracks.advancedOrderActiveId,
 		);
-		if (index !== -1 && index < selectedOrder.length - 1) {
-			const temp = selectedOrder[index];
-			selectedOrder[index] = selectedOrder[index + 1];
-			selectedOrder[index + 1] = temp;
+		if (index !== -1 && index < tracks.advancedOrder.length - 1) {
+			const temp = tracks.advancedOrder[index];
+			tracks.advancedOrder[index] = tracks.advancedOrder[index + 1];
+			tracks.advancedOrder[index + 1] = temp;
 		}
 	}
 
 	function getAdvancedOrderKey() {
-		const orderKeySegments = selectedOrder
+		const orderKeySegments = tracks.advancedOrder
 			.filter((item) => item.orderComponent.trait.traitKey !== undefined)
 			.map((item) => {
 				let segment = "";
@@ -122,11 +109,11 @@
 		<div
 			class="flex flex-col gap-1 w-full h-full p-1 overflow-x-hidden overflow-y-auto scrollbar-thumb-sp-light-grey bg-sp-dark-grey"
 		>
-			{#each selectedOrder as item, i (item.id)}
+			{#each tracks.advancedOrder as item, i (item.id)}
 				<button
 					type="button"
 					animate:flip={{ duration: 200 }}
-					onclick={() => (selectedOrderActiveId = item.id)}
+					onclick={() => (tracks.advancedOrderActiveId = item.id)}
 					class="relative w-full text-left cursor-pointer block"
 				>
 					{#if item.type === "group"}
@@ -135,7 +122,7 @@
 						<Sort bind:sort={item.orderComponent as SortObj} />
 					{/if}
 					<div
-						class="absolute inset-0 pointer-events-none rounded-sm {selectedOrderActiveId ===
+						class="absolute inset-0 pointer-events-none rounded-sm {tracks.advancedOrderActiveId ===
 						item.id
 							? 'bg-sp-med-light-grey/26'
 							: ''}"

@@ -21,7 +21,7 @@
 >
 	<FaIcon
 		icon={faSort}
-		class="w-fit h-4/5 shrink-0"
+		class="h-4/5 aspect-square shrink-0"
 	></FaIcon>
 	<Trait
 		traitKey={sort.trait.traitKey}
