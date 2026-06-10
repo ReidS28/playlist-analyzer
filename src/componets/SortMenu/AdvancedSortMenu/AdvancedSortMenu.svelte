@@ -112,12 +112,20 @@
 			class="flex flex-row gap-1 w-full h-10 shrink-0 p-1 mt-auto bg-sp-black"
 		>
 			<AdvancedSortButtonSquare>+</AdvancedSortButtonSquare>
-			<AdvancedSortButtonSquare>-</AdvancedSortButtonSquare>
-			<AdvancedSortButtonSquare onclick={() => {tracks.moveAdvancedOrderItemUp()}}
-				>⮝</AdvancedSortButtonSquare
+			<AdvancedSortButtonSquare
+				onclick={() => {
+					tracks.removeAdvancedOrderItem();
+				}}>-</AdvancedSortButtonSquare
 			>
-			<AdvancedSortButtonSquare onclick={() => {tracks.moveAdvancedOrderItemDown()}}
-				>⮟</AdvancedSortButtonSquare
+			<AdvancedSortButtonSquare
+				onclick={() => {
+					tracks.moveAdvancedOrderItemUp();
+				}}>⮝</AdvancedSortButtonSquare
+			>
+			<AdvancedSortButtonSquare
+				onclick={() => {
+					tracks.moveAdvancedOrderItemDown();
+				}}>⮟</AdvancedSortButtonSquare
 			>
 			<AdvancedSortButtonSquare
 				onclick={() => {
@@ -136,16 +144,21 @@
 			>
 				<Trait traitKey={"name"}></Trait>
 				<Trait traitKey={"artist"}></Trait>
+				<Trait traitKey={"album"}></Trait>
 				<Trait traitKey={"length"}></Trait>
 				<Trait traitKey={"date added"}></Trait>
-				<Trait traitKey={"eeeeeee"}></Trait>
-				<Trait traitKey={"eeeeee"}></Trait>
-				<Trait traitKey={"eeeeeeee"}></Trait>
-				<Trait traitKey={"eeeeeeeeeee"}></Trait>
-				<Trait traitKey={"eeeeee"}></Trait>
-				<Trait traitKey={"eeeeeeeee"}></Trait>
-				<Trait traitKey={"eeeeeee"}></Trait>
-				<Trait traitKey={"ee"}></Trait>
+
+				<Trait traitKey={"name"}></Trait>
+				<Trait traitKey={"artist"}></Trait>
+				<Trait traitKey={"album"}></Trait>
+				<Trait traitKey={"length"}></Trait>
+				<Trait traitKey={"date added"}></Trait>
+
+				<Trait traitKey={"name"}></Trait>
+				<Trait traitKey={"artist"}></Trait>
+				<Trait traitKey={"album"}></Trait>
+				<Trait traitKey={"length"}></Trait>
+				<Trait traitKey={"date added"}></Trait>
 			</div>
 		</div>
 	</div>

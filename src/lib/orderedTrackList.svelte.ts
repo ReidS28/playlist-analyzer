@@ -82,11 +82,22 @@ export class OrderedTrackList {
 	public removeAdvancedOrderItem(
 		id: `${string}-${string}-${string}-${string}-${string}` = this
 			.advancedOrderActiveId,
+		selectNextItem: boolean = true,
 	) {
-		this.advancedOrder.splice(this.findAdvancedOrderIndexFromId(id));
+		const index = this.findAdvancedOrderIndexFromId(id);
+		this.advancedOrder.splice(index, 1);
+		if (selectNextItem) {
+			const nextIndex = Math.min(index, this.advancedOrder.length - 1);
+			if (nextIndex >= 0) {
+				this.advancedOrderActiveId = this.advancedOrder[nextIndex].id;
+			}
+		}
 	}
 
-	public moveAdvancedOrderItemUp(id: `${string}-${string}-${string}-${string}-${string}` = this.advancedOrderActiveId) {
+	public moveAdvancedOrderItemUp(
+		id: `${string}-${string}-${string}-${string}-${string}` = this
+			.advancedOrderActiveId,
+	) {
 		const index = this.findAdvancedOrderIndexFromId(id);
 		if (index > 0) {
 			const temp = this.advancedOrder[index];
@@ -95,7 +106,10 @@ export class OrderedTrackList {
 		}
 	}
 
-	public moveAdvancedOrderItemDown(id: `${string}-${string}-${string}-${string}-${string}` = this.advancedOrderActiveId) {
+	public moveAdvancedOrderItemDown(
+		id: `${string}-${string}-${string}-${string}-${string}` = this
+			.advancedOrderActiveId,
+	) {
 		const index = this.findAdvancedOrderIndexFromId(id);
 		if (index !== -1 && index < this.advancedOrder.length - 1) {
 			const temp = this.advancedOrder[index];
