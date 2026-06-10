@@ -87,7 +87,7 @@
 		<div
 			class="flex flex-col gap-1 w-full h-full p-1 overflow-x-hidden overflow-y-auto scrollbar-thumb-sp-light-grey"
 		>
-			{#each tracks.advancedOrder as item, i (item.id)}
+			{#each tracks.advancedOrder as item (item.id)}
 				<button
 					type="button"
 					animate:flip={{ duration: 200 }}
@@ -106,7 +106,9 @@
 							: ''}"
 					></div>
 				</button>
-			{/each}
+			{:else}<div
+					class="flex flex-row p-1 gap-2 w-full h-8 items-center justify-center rounded-sm shrink-0 border-[1.5px] border-sp-light-grey bg-sp-grey border-dashed"
+				>Add a sort or group</div>{/each}
 		</div>
 		<div
 			class="flex flex-row gap-1 w-full h-10 shrink-0 p-1 mt-auto bg-sp-black"
