@@ -84,7 +84,7 @@
 			.map((item) => {
 				let segment = "";
 
-				if (item.type === "group-") {
+				if (false /*item.type === "group-"*/) {
 					segment = `group.[${item.orderComponent.trait.traitKey}]`;
 				} else {
 					segment = item.orderComponent.trait.traitKey
@@ -104,10 +104,10 @@
 	class="flex flex-row w-full h-fit p-1 gap-1 bg-sp-grey"
 >
 	<div
-		class="flex flex-col w-5/10 h-50 rounded-lg overflow-hidden shrink-0 bg-sp-dark-grey"
+		class="flex flex-col w-5/10 h-fit min-h-24 max-h-50 rounded-lg overflow-hidden shrink-0 bg-sp-dark-grey"
 	>
 		<div
-			class="flex flex-col gap-1 w-full h-full p-1 overflow-x-hidden overflow-y-auto scrollbar-thumb-sp-light-grey bg-sp-dark-grey"
+			class="flex flex-col gap-1 w-full h-full p-1 overflow-x-hidden overflow-y-auto scrollbar-thumb-sp-light-grey"
 		>
 			{#each tracks.advancedOrder as item, i (item.id)}
 				<button
@@ -130,7 +130,7 @@
 				</button>
 			{/each}
 		</div>
-		<div class="flex flex-row gap-1 w-full h-12 p-1 mt-auto bg-sp-black">
+		<div class="flex flex-row gap-1 w-full h-10 shrink-0 p-1 mt-auto bg-sp-black">
 			<AdvancedSortButtonSquare>+</AdvancedSortButtonSquare>
 			<AdvancedSortButtonSquare>-</AdvancedSortButtonSquare>
 			<AdvancedSortButtonSquare onclick={moveTraitUp}

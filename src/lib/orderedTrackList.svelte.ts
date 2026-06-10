@@ -37,7 +37,7 @@ export class OrderedTrackList {
 		this.createAdvancedOrderItem("group", LENGTH_TRAIT),
 		this.createAdvancedOrderItem("sort", BLANK_TRAIT),
 		this.createAdvancedOrderItem("sort", NAME_TRAIT),
-		//this.createAdvancedOrderItem("sort", NAME_TRAIT),
+		this.createAdvancedOrderItem("sort", NAME_TRAIT),
 	]);
 	public advancedOrderActiveId: `${string}-${string}-${string}-${string}-${string}` =
 		$state("0-0-0-0-0");
@@ -49,7 +49,7 @@ export class OrderedTrackList {
 
 		$effect(() => {
 			this.resetOrder();
-		});
+		});	
 	}
 
 	public createAdvancedOrderItem(
