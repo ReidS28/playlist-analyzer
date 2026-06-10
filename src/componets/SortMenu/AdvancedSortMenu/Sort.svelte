@@ -24,7 +24,7 @@
 		class="h-4/5 aspect-square shrink-0"
 	></FaIcon>
 	<Trait
-		traitKey={sort.trait.traitKey}
+		trait={sort.trait}
 		class="flex-1 m-auto min-w-0"
 	></Trait>
 	<button

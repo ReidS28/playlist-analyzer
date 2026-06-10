@@ -108,7 +108,9 @@
 				</button>
 			{:else}<div
 					class="flex flex-row p-1 gap-2 w-full h-8 items-center justify-center rounded-sm shrink-0 border-[1.5px] border-sp-light-grey bg-sp-grey border-dashed"
-				>Add a sort or group</div>{/each}
+				>
+					Add a sort or group
+				</div>{/each}
 		</div>
 		<div
 			class="flex flex-row gap-1 w-full h-10 shrink-0 p-1 mt-auto bg-sp-black"
@@ -144,23 +146,23 @@
 			<div
 				class="flex flex-row flex-wrap *:w-fit gap-1 w-full h-fit bg-orange-500-"
 			>
-				<Trait traitKey={"name"}></Trait>
-				<Trait traitKey={"artist"}></Trait>
-				<Trait traitKey={"album"}></Trait>
-				<Trait traitKey={"length"}></Trait>
-				<Trait traitKey={"date added"}></Trait>
+				<Trait trait={NAME_TRAIT}></Trait>
+				<Trait trait={ARTIST_TRAIT}></Trait>
+				<Trait trait={ALBUM_TRAIT}></Trait>
+				<Trait trait={LENGTH_TRAIT}></Trait>
+				<Trait trait={DATE_ADDED_TRAIT}></Trait>
 
-				<Trait traitKey={"name"}></Trait>
-				<Trait traitKey={"artist"}></Trait>
-				<Trait traitKey={"album"}></Trait>
-				<Trait traitKey={"length"}></Trait>
-				<Trait traitKey={"date added"}></Trait>
+				<Trait trait={NAME_TRAIT}></Trait>
+				<Trait trait={ARTIST_TRAIT}></Trait>
+				<Trait trait={ALBUM_TRAIT}></Trait>
+				<Trait trait={LENGTH_TRAIT}></Trait>
+				<Trait trait={DATE_ADDED_TRAIT}></Trait>
 
-				<Trait traitKey={"name"}></Trait>
-				<Trait traitKey={"artist"}></Trait>
-				<Trait traitKey={"album"}></Trait>
-				<Trait traitKey={"length"}></Trait>
-				<Trait traitKey={"date added"}></Trait>
+				<Trait trait={NAME_TRAIT}></Trait>
+				<Trait trait={ARTIST_TRAIT}></Trait>
+				<Trait trait={ALBUM_TRAIT}></Trait>
+				<Trait trait={LENGTH_TRAIT}></Trait>
+				<Trait trait={DATE_ADDED_TRAIT}></Trait>
 			</div>
 		</div>
 	</div>
