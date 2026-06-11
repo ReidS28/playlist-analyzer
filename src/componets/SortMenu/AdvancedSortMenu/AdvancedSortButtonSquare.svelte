@@ -18,24 +18,40 @@
 	}: Props = $props();
 
 	let menuOpen = $state(false);
+	let containerRef = $state<HTMLDivElement | null>(null);
+	let menuRef = $state<HTMLDivElement | null>(null);
 
-	function handleClick() {
-		if (menu) {
-			menuOpen = !menuOpen;
-		}
-		onclick?.();
-	}
+	$effect(() => {
+		if (!menuOpen) return;
+
+		// Close menu click
+		const handleDocumentClick = (event: MouseEvent) => {
+			const target = event.target as Node;
+
+            if (menuRef && menuRef.contains(target)) {
+                menuOpen = false;
+                return;
+            }
+
+            if (containerRef && !containerRef.contains(target)) {
+                menuOpen = false;
+            }
+		};
+
+		document.addEventListener("click", handleDocumentClick);
+
+		return () => {
+			document.removeEventListener("click", handleDocumentClick);
+		};
+	});
 </script>
 
-<div class="relative inline-block h-full {className}">
+<div
+	bind:this={containerRef}
+	class="relative inline-block h-full {className}"
+>
 	{#if menu && menuOpen}
-		<div
-			class="fixed inset-0 cursor-default"
-			onclick={() => (menuOpen = false)}
-			role="presentation"
-		></div>
-
-		<div class="absolute bottom-full mb-1">
+		<div bind:this={menuRef} class="absolute bottom-full mb-1 z-20">
 			{@render menu()}
 		</div>
 	{/if}

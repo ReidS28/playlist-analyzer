@@ -32,13 +32,7 @@ export class OrderedTrackList {
 		id: `${string}-${string}-${string}-${string}-${string}`;
 		type: "group" | "sort";
 		orderComponent: orderComponentObj;
-	}[] = $state([
-		this.createAdvancedOrderItem("group", ARTIST_TRAIT),
-		this.createAdvancedOrderItem("group", LENGTH_TRAIT),
-		this.createAdvancedOrderItem("sort", BLANK_TRAIT),
-		this.createAdvancedOrderItem("sort", NAME_TRAIT),
-		this.createAdvancedOrderItem("sort", NAME_TRAIT),
-	]);
+	}[] = $state([]);
 	public advancedOrderActiveId: `${string}-${string}-${string}-${string}-${string}` =
 		$state("0-0-0-0-0");
 

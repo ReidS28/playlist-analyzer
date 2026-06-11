@@ -82,7 +82,7 @@
 	class="flex flex-row w-full h-fit p-1 gap-1 bg-sp-grey"
 >
 	<div
-		class="flex flex-col w-5/10 h-fit min-h-24 max-h-50 rounded-lg overflow-hidden shrink-0 bg-sp-dark-grey"
+		class="flex flex-col w-5/10 h-fit min-h-30 max-h-50 rounded-lg overflow-hidden shrink-0 bg-sp-dark-grey"
 	>
 		<div
 			class="flex flex-col gap-1 w-full h-full p-1 overflow-x-hidden overflow-y-auto scrollbar-thumb-sp-light-grey"
@@ -117,7 +117,7 @@
 		>
 			{#snippet addAdvancedOrderItemMenu()}
 				<div
-					class="w-fit rounded bg-sp-med-light-grey p-0.5 shadow-xl flex flex-col gap-1 *:px-1 *:py-0.5 *:items-center *:text-left *:text-sm *:bg-sp-grey *:hover:bg-sp-green/40 *:rounded"
+					class="flex flex-col w-fit h-fit rounded bg-sp-med-light-grey p-0.75 gap-0.75 *:px-1 *:py-0 *:items-center *:text-left *:text-lg *:bg-sp-grey *:hover:bg-sp-green/40 *:rounded"
 				>
 					<button
 						onclick={() => {
