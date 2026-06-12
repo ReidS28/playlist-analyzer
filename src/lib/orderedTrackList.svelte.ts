@@ -168,7 +168,7 @@ export class OrderedTrackList {
 
 	public async order(orderKey: string = "custom"): Promise<void> {
 		if (this.getTraitBase(orderKey) == "advanced") {
-			const next = orderKey.replace("advanced.", "").slice(1, -1); // Remove Brackets
+			const next = orderKey.replace("advanced.", "").slice(1, -1); // Isolate inside brackets
 			//console.log(`next: ${next}`);
 			await this.sort(next);
 		} else {
@@ -211,6 +211,8 @@ export class OrderedTrackList {
 				traits.push({ selector: this.getName, reverse: traitReversed });
 			} else if (traitBase == "artist") {
 				traits.push({ selector: this.getArtistName, reverse: traitReversed });
+			} else if (traitBase == "album") {
+				traits.push({ selector: this.getAlbumName, reverse: traitReversed });
 			} else if (traitBase == "length") {
 				traits.push({ selector: this.getLength, reverse: traitReversed });
 			} else if (traitBase == "dateAdded") {
@@ -267,6 +269,10 @@ export class OrderedTrackList {
 
 	public getArtistName = (track: PlaylistedTrack): string | undefined => {
 		return track?.item?.artists[0]?.name;
+	};
+
+	public getAlbumName = (track: PlaylistedTrack): string | undefined => {
+		return track?.item?.album?.name;
 	};
 
 	public getLength = (track: PlaylistedTrack): number | undefined => {

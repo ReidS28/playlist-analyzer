@@ -123,13 +123,20 @@
 	<ul class="flex flex-col gap-1 p-1 w-full h-full">
 		{#if tracks.arrangedTracks}
 			{#each tracks.arrangedTracks as track (track.item.id)}
+				{@const displayKeyBase = tracks.getTraitBase()}
+				{@const displayKey =
+					displayKeyBase === "advanced"
+						? tracks.getTraitBase(
+								tracks.currentOrder.replace("advanced.", "").slice(1, -1),
+							)
+						: displayKeyBase}
 				<div
 					class="*:shrink-0 *:w-full *:h-20"
 					animate:flip={{ duration: 500 }}
 				>
 					<TrackBar
 						data={track}
-						baseCurrentOrder={tracks.getTraitBase()}
+						{displayKey}
 					></TrackBar>
 				</div>
 			{/each}

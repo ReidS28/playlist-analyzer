@@ -5,19 +5,17 @@
 
 	interface Props {
 		data: PlaylistedTrack | undefined;
-		baseCurrentOrder: String | undefined;
+		displayKey: String | undefined;
 		class?: string;
 	}
-	let {
-		data,
-		baseCurrentOrder = undefined,
-		class: className = "",
-	}: Props = $props();
+	let { data, displayKey = undefined, class: className = "" }: Props = $props();
 
 	function getSpecialValue(): String | undefined {
-		if (baseCurrentOrder == "length") {
+		if (displayKey == "length") {
 			return formatDurationMs(data?.item?.duration_ms, true) + "" || "";
-		} else if (baseCurrentOrder == "dateAdded") {
+		} else if (displayKey == "album") {
+			return data?.item.album.name || "";
+		} else if (displayKey == "dateAdded") {
 			return formatIsoToLocal(String(data?.added_at)) || "";
 		}
 		return undefined;
@@ -33,16 +31,15 @@
 	<div class="flex flex-col min-w-0 w-full h-full">
 		<span
 			class="text-xl primaryText truncate shrink-0"
-			class:!text-sp-green={baseCurrentOrder == "name"}
-			>{data?.item?.name || ""}</span
+			class:!text-sp-green={displayKey == "name"}>{data?.item?.name || ""}</span
 		>
 		<div class="flex w-full h-full">
 			<span
 				class="text-xl secondaryText w-full truncate"
-				class:!text-sp-green={baseCurrentOrder == "artist"}
+				class:!text-sp-green={displayKey == "artist"}
 				>{data?.item?.artists[0]?.name || ""}</span
 			>
-			{#if baseCurrentOrder && getSpecialValue()}
+			{#if displayKey && getSpecialValue()}
 				<div
 					class="mt-auto w-fit h-fit px-1 border-3 border-sp-green/60 rounded-xl bg-sp-green/40"
 				>
