@@ -27,6 +27,7 @@
 	></FaIcon>
 	<Trait
 		trait={group.trait}
+		display={false}
 		class="flex-1 m-auto min-w-0"
 	></Trait>
 	<button

@@ -25,6 +25,7 @@
 	></FaIcon>
 	<Trait
 		trait={sort.trait}
+		display={false}
 		class="flex-1 m-auto min-w-0"
 	></Trait>
 	<button

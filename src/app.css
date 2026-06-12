@@ -20,7 +20,7 @@
 	--color-sp-dark-grey: #212121;
 	--color-sp-black: #121212;
 
-	--font-sans: 'Satoshi', sans-serif;
+	--font-sans: "Satoshi", sans-serif;
 }
 
 @layer base {
@@ -46,5 +46,9 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+	}
+
+	.before-overlay {
+		@apply relative overflow-hidden before:content-[''] before:absolute before:inset-0 before:pointer-events-none before:transition-colors;
 	}
 }

@@ -112,6 +112,17 @@ export class OrderedTrackList {
 		}
 	}
 
+	public setAdvancedOrderItemTrait(
+		trait: TraitObj,
+		id: `${string}-${string}-${string}-${string}-${string}` = this
+			.advancedOrderActiveId,
+	) {
+		const index = this.findAdvancedOrderIndexFromId(id);
+		if (index >= 0) {
+			this.advancedOrder[index].orderComponent.trait = trait;
+		}
+	}
+
 	public moveAdvancedOrderItemUp(
 		id: `${string}-${string}-${string}-${string}-${string}` = this
 			.advancedOrderActiveId,

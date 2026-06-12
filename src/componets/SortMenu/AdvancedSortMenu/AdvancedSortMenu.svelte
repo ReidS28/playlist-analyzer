@@ -5,10 +5,10 @@
 
 	import type { OrderedTrackList } from "../../../lib/orderedTrackList.svelte";
 	import AdvancedSortButtonSquare from "./AdvancedSortButtonSquare.svelte";
-	import SortingGroup from "./Group.svelte";
-	import Sort from "./Sort.svelte";
+	import SortingGroup from "./GroupItem.svelte";
+	import Sort from "./SortItem.svelte";
 	import Trait from "./Trait.svelte";
-	import Group from "./Group.svelte";
+	import Group from "./GroupItem.svelte";
 	import {
 		ARTIST_TRAIT,
 		BLANK_TRAIT,
@@ -26,6 +26,14 @@
 		tracks: OrderedTrackList;
 	}
 	let { tracks }: Props = $props();
+
+	const baseTraits = [
+		NAME_TRAIT,
+		ARTIST_TRAIT,
+		ALBUM_TRAIT,
+		LENGTH_TRAIT,
+		DATE_ADDED_TRAIT,
+	];
 
 	function createItem(
 		type: "group" | "sort",
@@ -172,23 +180,16 @@
 			<div
 				class="flex flex-row flex-wrap *:w-fit gap-1 w-full h-fit bg-orange-500-"
 			>
-				<Trait trait={NAME_TRAIT}></Trait>
-				<Trait trait={ARTIST_TRAIT}></Trait>
-				<Trait trait={ALBUM_TRAIT}></Trait>
-				<Trait trait={LENGTH_TRAIT}></Trait>
-				<Trait trait={DATE_ADDED_TRAIT}></Trait>
-
-				<Trait trait={NAME_TRAIT}></Trait>
-				<Trait trait={ARTIST_TRAIT}></Trait>
-				<Trait trait={ALBUM_TRAIT}></Trait>
-				<Trait trait={LENGTH_TRAIT}></Trait>
-				<Trait trait={DATE_ADDED_TRAIT}></Trait>
-
-				<Trait trait={NAME_TRAIT}></Trait>
-				<Trait trait={ARTIST_TRAIT}></Trait>
-				<Trait trait={ALBUM_TRAIT}></Trait>
-				<Trait trait={LENGTH_TRAIT}></Trait>
-				<Trait trait={DATE_ADDED_TRAIT}></Trait>
+				{#each baseTraits as trait}
+					<Trait
+						traitSelected={(trait) => {
+							if (trait) {
+								tracks.setAdvancedOrderItemTrait(trait);
+							}
+						}}
+						{trait}
+					/>
+				{/each}
 			</div>
 		</div>
 	</div>
