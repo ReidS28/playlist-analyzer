@@ -12,6 +12,7 @@ import {
 	type SortObj,
 	type TraitObj,
 } from "./constants.svelte";
+import type { UUID } from "crypto";
 
 type TrackTraitSelector = (
 	track: PlaylistedTrack,
@@ -30,12 +31,11 @@ export class OrderedTrackList {
 	public item = $state({ id: crypto.randomUUID() });
 
 	public advancedOrder: {
-		id: `${string}-${string}-${string}-${string}-${string}`;
+		id: UUID;
 		type: "group" | "sort";
 		orderComponent: orderComponentObj;
 	}[] = $state([]);
-	public advancedOrderActiveId: `${string}-${string}-${string}-${string}-${string}` =
-		$state("0-0-0-0-0");
+	public advancedOrderActiveId: UUID = $state("0-0-0-0-0");
 
 	public constructor(getTracks: () => Promise<PlaylistedTrack[]> | null) {
 		this.getTracks = getTracks;
@@ -49,7 +49,7 @@ export class OrderedTrackList {
 		type: "group" | "sort",
 		trait: TraitObj = BLANK_TRAIT,
 	): {
-		id: `${string}-${string}-${string}-${string}-${string}`;
+		id: UUID;
 		type: "group" | "sort";
 		orderComponent: orderComponentObj;
 	} {
@@ -65,21 +65,17 @@ export class OrderedTrackList {
 		};
 	}
 
-	public findAdvancedOrderIndexFromId(
-		id: `${string}-${string}-${string}-${string}-${string}` = this
-			.advancedOrderActiveId,
-	) {
+	public findAdvancedOrderIndexFromId(id: UUID = this.advancedOrderActiveId) {
 		return this.advancedOrder.findIndex((item) => item.id === id);
 	}
 
 	public addAdvancedOrderItem(
 		item: {
-			id: `${string}-${string}-${string}-${string}-${string}`;
+			id: UUID;
 			type: "group" | "sort";
 			orderComponent: orderComponentObj;
 		},
-		afterId: `${string}-${string}-${string}-${string}-${string}` = this
-			.advancedOrderActiveId,
+		afterId: UUID = this.advancedOrderActiveId,
 		selectOnAdd: boolean = true,
 	) {
 		let index = this.findAdvancedOrderIndexFromId(afterId) + 1;
@@ -200,7 +196,7 @@ export class OrderedTrackList {
 			}
 		}
 		console.log(
-			`output keys: [${output.map((item) => '"' +  item.key + '"' + (item.group ? "(group)" : "")).join("], [")}]`,
+			`output keys: [${output.map((item) => '"' + item.key + '"' + (item.group ? "(group)" : "")).join("], [")}]`,
 		);
 		return output;
 	}

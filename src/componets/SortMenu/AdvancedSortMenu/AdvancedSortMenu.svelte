@@ -21,6 +21,7 @@
 		type SortObj,
 		type TraitObj,
 	} from "../../../lib/constants.svelte";
+	import type { UUID } from "crypto";
 
 	interface Props {
 		tracks: OrderedTrackList;
@@ -39,7 +40,7 @@
 		type: "group" | "sort",
 		trait: TraitObj,
 	): {
-		id: `${string}-${string}-${string}-${string}-${string}`;
+		id: UUID;
 		type: "group" | "sort";
 		orderComponent: orderComponentObj;
 	} {
