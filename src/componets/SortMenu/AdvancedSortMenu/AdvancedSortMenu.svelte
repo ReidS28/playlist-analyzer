@@ -66,19 +66,20 @@
 
 	function getAdvancedOrderKey() {
 		const orderKeySegments = tracks.advancedOrder
-			.filter((item) => item.orderComponent.trait.traitKey !== undefined)
+			.filter((item) => item.orderComponent.trait.traitKey !== undefined) // Remove blank traits
 			.map((item) => {
 				let segment = "";
+				const key =
+					item.orderComponent.trait.traitKey +
+					(item.orderComponent.reversed ? ".reversed" : "");
 
-				if (false /*item.type === "group-"*/) {
-					segment = `group.[${item.orderComponent.trait.traitKey}]`;
+				if (item.type === "group") {
+					segment = `group.[${key}]`;
 				} else {
-					segment = item.orderComponent.trait.traitKey
-						? `${item.orderComponent.trait.traitKey}`
-						: "default";
+					segment = key;
 				}
 
-				return item.orderComponent.reversed ? `${segment}.reversed` : segment;
+				return segment;
 			});
 
 		return `advanced.[${orderKeySegments.join(",")}]`;

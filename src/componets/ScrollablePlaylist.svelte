@@ -123,21 +123,24 @@
 	<ul class="flex flex-col gap-1 p-1 w-full h-full">
 		{#if tracks.arrangedTracks}
 			{#each tracks.arrangedTracks as track (track.item.id)}
-				{@const displayKeyBase = tracks.getTraitBase()}
-				{@const displayKey =
-					displayKeyBase === "advanced"
-						? tracks.getTraitBase(
-								tracks.currentOrder.replace("advanced.", "").slice(1, -1),
-							)
-						: displayKeyBase}
-				<div
-					class="*:shrink-0 *:w-full *:h-20"
-					animate:flip={{ duration: 500 }}
-				>
-					<TrackBar
-						data={track}
-						{displayKey}
-					></TrackBar>
+				<div animate:flip={{ duration: 200 }}>
+					{#if track instanceof OrderedTrackList}
+						<div class="h-20 w-full shrink-0 bg-pink-500"></div>
+					{:else}
+						{@const displayKeyBase = tracks.getTraitBase()}
+						{@const displayKey =
+							displayKeyBase === "advanced"
+								? tracks.getTraitBase(
+										tracks.currentOrder.replace("advanced.", "").slice(1, -1),
+									)
+								: displayKeyBase}
+						<div class="*:shrink-0 *:w-full *:h-20">
+							<TrackBar
+								data={track}
+								{displayKey}
+							></TrackBar>
+						</div>
+					{/if}
 				</div>
 			{/each}
 		{:else}

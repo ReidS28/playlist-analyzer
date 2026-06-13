@@ -26,7 +26,8 @@ export class OrderedTrackList {
 	private getTracks: () => Promise<PlaylistedTrack[]> | null;
 
 	public currentOrder = $state("custom");
-	public arrangedTracks: PlaylistedTrack[] = $state([]);
+	public arrangedTracks: (PlaylistedTrack | OrderedTrackList)[] = $state([]);
+	public item = $state({ id: crypto.randomUUID() });
 
 	public advancedOrder: {
 		id: `${string}-${string}-${string}-${string}-${string}`;
@@ -38,8 +39,6 @@ export class OrderedTrackList {
 
 	public constructor(getTracks: () => Promise<PlaylistedTrack[]> | null) {
 		this.getTracks = getTracks;
-
-		//$inspect(this.currentOrder);
 
 		$effect(() => {
 			this.resetOrder();
@@ -166,11 +165,52 @@ export class OrderedTrackList {
 		}
 	}
 
+	public flattenTrackOrder(
+		input: (PlaylistedTrack | OrderedTrackList)[] = this.arrangedTracks,
+	): PlaylistedTrack[] {
+		let output: PlaylistedTrack[] = [];
+		for (const element of input) {
+			if (element instanceof OrderedTrackList) {
+				output.push(...this.flattenTrackOrder(element.arrangedTracks));
+			} else {
+				output.push(element);
+			}
+		}
+		return output;
+	}
+
+	public splitGroups(orderKey: string): { key: string; group: boolean }[] {
+		let temp = orderKey;
+		let output: { key: string; group: boolean }[] = [];
+		while (true) {
+			const nextIndex = temp.indexOf("group.[");
+			if (nextIndex === -1) {
+				console.log("no more group.[");
+				output.push({ key: temp, group: false });
+				break;
+			} else {
+				if (nextIndex > 1) {
+					output.push({ key: temp.substring(0, nextIndex - 1), group: false });
+					temp = temp.substring(nextIndex);
+				}
+				temp = temp.replace("group.[", "");
+				const closingIndex = temp.indexOf("]");
+				output.push({ key: temp.substring(0, closingIndex), group: true });
+				temp = temp.substring(closingIndex + 2);
+			}
+		}
+		console.log(
+			`output keys: [${output.map((item) => '"' +  item.key + '"' + (item.group ? "(group)" : "")).join("], [")}]`,
+		);
+		return output;
+	}
+
 	public async order(orderKey: string = "custom"): Promise<void> {
-		if (this.getTraitBase(orderKey) == "advanced") {
-			const next = orderKey.replace("advanced.", "").slice(1, -1); // Isolate inside brackets
+		if (this.getTraitBase(orderKey) === "advanced") {
+			const nextKey = orderKey.replace("advanced.", "").slice(1, -1); // Isolate inside brackets
 			//console.log(`next: ${next}`);
-			await this.sort(next);
+			this.splitGroups(nextKey);
+			await this.sort(nextKey);
 		} else {
 			// Toggle reverse for the first trait if the traits are the same as before and reverse isn't specified
 			const firstTraitReversed = this.getTraitReversed(orderKey);
@@ -220,7 +260,9 @@ export class OrderedTrackList {
 			}
 		}
 
-		this.arrangedTracks.sort((a, b) => this.compare(a, b, ...traits));
+		this.arrangedTracks = this.flattenTrackOrder().sort((a, b) =>
+			this.compare(a, b, ...traits),
+		);
 
 		return;
 	}
