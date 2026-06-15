@@ -34,7 +34,14 @@ export class OrderedTrackList {
 		id: UUID;
 		type: "group" | "sort";
 		orderComponent: orderComponentObj;
-	}[] = $state([]);
+	}[] = $state([
+		this.createAdvancedOrderItem("sort", ARTIST_TRAIT),
+		this.createAdvancedOrderItem("group", ALBUM_TRAIT),
+		this.createAdvancedOrderItem("group", NAME_TRAIT),
+		this.createAdvancedOrderItem("group", LENGTH_TRAIT),
+		this.createAdvancedOrderItem("sort", DATE_ADDED_TRAIT),
+		this.createAdvancedOrderItem("sort", NAME_TRAIT),
+	]);
 	public advancedOrderActiveId: UUID = $state("0-0-0-0-0");
 
 	public constructor(getTracks: () => Promise<PlaylistedTrack[]> | null) {
@@ -175,13 +182,14 @@ export class OrderedTrackList {
 		return output;
 	}
 
-	public splitGroups(orderKey: string): { key: string; group: boolean }[] {
+	public splitOrderKeyByGroups(
+		orderKey: string,
+	): { key: string; group: boolean }[] {
 		let temp = orderKey;
 		let output: { key: string; group: boolean }[] = [];
 		while (true) {
 			const nextIndex = temp.indexOf("group.[");
 			if (nextIndex === -1) {
-				console.log("no more group.[");
 				output.push({ key: temp, group: false });
 				break;
 			} else {
@@ -195,18 +203,20 @@ export class OrderedTrackList {
 				temp = temp.substring(closingIndex + 2);
 			}
 		}
-		console.log(
-			`output keys: [${output.map((item) => '"' + item.key + '"' + (item.group ? "(group)" : "")).join("], [")}]`,
-		);
 		return output;
+	}
+
+	public flattenSplitOrderKey(splitKey: { key: string; group: boolean }[]) {
+		return splitKey.map((item) => item.key).join(",");
 	}
 
 	public async order(orderKey: string = "custom"): Promise<void> {
 		if (this.getTraitBase(orderKey) === "advanced") {
 			const nextKey = orderKey.replace("advanced.", "").slice(1, -1); // Isolate inside brackets
-			//console.log(`next: ${next}`);
-			this.splitGroups(nextKey);
-			await this.sort(nextKey);
+			const splitKey = this.splitOrderKeyByGroups(nextKey);
+			const simpleKey = this.flattenSplitOrderKey(splitKey);
+			console.log(`simpleKey: ${simpleKey}`);
+			await this.sort(simpleKey);
 		} else {
 			// Toggle reverse for the first trait if the traits are the same as before and reverse isn't specified
 			const firstTraitReversed = this.getTraitReversed(orderKey);
@@ -227,6 +237,11 @@ export class OrderedTrackList {
 		this.currentOrder = orderKey;
 		console.log(`Current Track Order: ${this.currentOrder}`);
 	}
+
+	public group(
+		sortedOrder: (PlaylistedTrack | OrderedTrackList)[],
+		splitKey: { key: string; group: boolean }[],
+	) {}
 
 	public async sort(traitsKey = "custom"): Promise<void> {
 		const splitTraitsKey = traitsKey.split(",");
