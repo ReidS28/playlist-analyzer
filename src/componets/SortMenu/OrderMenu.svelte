@@ -19,6 +19,7 @@
 	import OrderButton from "./OrderButton.svelte";
 	import AdvancedSortMenu from "./AdvancedSortMenu/AdvancedSortMenu.svelte";
 	import { AdvancedOrderState } from "../../lib/advancedOrderState.svelte";
+	import FaIcon from "../ui/FaIcon.svelte";
 
 	interface Props {
 		tracks: OrderedTrackList;
@@ -98,17 +99,16 @@
 				: 'hover:bg-sp-green/40 bg-sp-dark-grey'}"
 			aria-label="Advanced Order Menu"
 		>
-			<svg
-				viewBox="0 0 {icon.icon[0]} {icon.icon[1]}"
-				class="w-fit h-full fill-current shrink-0"
-			>
-				{#each paths as pathData}
-					<path d={pathData} />
-				{/each}
-			</svg>
+			<FaIcon
+				icon={faEllipsis}
+				class="w-fit h-full"
+			></FaIcon>
 		</button>
 	</div>
 	{#if menuOpen}
-		<AdvancedSortMenu {tracks} orderState={advancedOrderState}></AdvancedSortMenu>
+		<AdvancedSortMenu
+			{tracks}
+			orderState={advancedOrderState}
+		></AdvancedSortMenu>
 	{/if}
 </div>
