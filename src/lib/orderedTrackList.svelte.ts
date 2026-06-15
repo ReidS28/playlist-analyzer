@@ -30,123 +30,12 @@ export class OrderedTrackList {
 	public arrangedTracks: (PlaylistedTrack | OrderedTrackList)[] = $state([]);
 	public item = $state({ id: crypto.randomUUID() });
 
-	public advancedOrder: {
-		id: UUID;
-		type: "group" | "sort";
-		orderComponent: orderComponentObj;
-	}[] = $state([
-		this.createAdvancedOrderItem("sort", ARTIST_TRAIT),
-		this.createAdvancedOrderItem("group", ALBUM_TRAIT),
-		this.createAdvancedOrderItem("group", NAME_TRAIT),
-		this.createAdvancedOrderItem("group", LENGTH_TRAIT),
-		this.createAdvancedOrderItem("sort", DATE_ADDED_TRAIT),
-		this.createAdvancedOrderItem("sort", NAME_TRAIT),
-	]);
-	public advancedOrderActiveId: UUID = $state("0-0-0-0-0");
-
 	public constructor(getTracks: () => Promise<PlaylistedTrack[]> | null) {
 		this.getTracks = getTracks;
 
 		$effect(() => {
 			this.resetOrder();
 		});
-	}
-
-	public createAdvancedOrderItem(
-		type: "group" | "sort",
-		trait: TraitObj = BLANK_TRAIT,
-	): {
-		id: UUID;
-		type: "group" | "sort";
-		orderComponent: orderComponentObj;
-	} {
-		const isGroup = type === "group";
-		return {
-			id: crypto.randomUUID(),
-			type,
-			orderComponent: {
-				trait,
-				reversed: false,
-				...(isGroup && { groupBy: "firstLetter" as const }),
-			},
-		};
-	}
-
-	public findAdvancedOrderIndexFromId(id: UUID = this.advancedOrderActiveId) {
-		return this.advancedOrder.findIndex((item) => item.id === id);
-	}
-
-	public addAdvancedOrderItem(
-		item: {
-			id: UUID;
-			type: "group" | "sort";
-			orderComponent: orderComponentObj;
-		},
-		afterId: UUID = this.advancedOrderActiveId,
-		selectOnAdd: boolean = true,
-	) {
-		let index = this.findAdvancedOrderIndexFromId(afterId) + 1;
-		if (index === 0) {
-			index = this.advancedOrder.length;
-		} else {
-		}
-		this.advancedOrder.splice(index, 0, item);
-		if (selectOnAdd) {
-			const nextIndex = Math.min(index, this.advancedOrder.length - 1);
-			if (nextIndex >= 0) {
-				this.advancedOrderActiveId = this.advancedOrder[nextIndex].id;
-			}
-		}
-	}
-
-	public removeAdvancedOrderItem(
-		id: `${string}-${string}-${string}-${string}-${string}` = this
-			.advancedOrderActiveId,
-		selectNextItem: boolean = true,
-	) {
-		const index = this.findAdvancedOrderIndexFromId(id);
-		this.advancedOrder.splice(index, 1);
-		if (selectNextItem) {
-			const nextIndex = Math.min(index, this.advancedOrder.length - 1);
-			if (nextIndex >= 0) {
-				this.advancedOrderActiveId = this.advancedOrder[nextIndex].id;
-			}
-		}
-	}
-
-	public setAdvancedOrderItemTrait(
-		trait: TraitObj,
-		id: `${string}-${string}-${string}-${string}-${string}` = this
-			.advancedOrderActiveId,
-	) {
-		const index = this.findAdvancedOrderIndexFromId(id);
-		if (index >= 0) {
-			this.advancedOrder[index].orderComponent.trait = trait;
-		}
-	}
-
-	public moveAdvancedOrderItemUp(
-		id: `${string}-${string}-${string}-${string}-${string}` = this
-			.advancedOrderActiveId,
-	) {
-		const index = this.findAdvancedOrderIndexFromId(id);
-		if (index > 0) {
-			const temp = this.advancedOrder[index];
-			this.advancedOrder[index] = this.advancedOrder[index - 1];
-			this.advancedOrder[index - 1] = temp;
-		}
-	}
-
-	public moveAdvancedOrderItemDown(
-		id: `${string}-${string}-${string}-${string}-${string}` = this
-			.advancedOrderActiveId,
-	) {
-		const index = this.findAdvancedOrderIndexFromId(id);
-		if (index !== -1 && index < this.advancedOrder.length - 1) {
-			const temp = this.advancedOrder[index];
-			this.advancedOrder[index] = this.advancedOrder[index + 1];
-			this.advancedOrder[index + 1] = temp;
-		}
 	}
 
 	public getTraitBase(traitsKey = this.currentOrder): string {

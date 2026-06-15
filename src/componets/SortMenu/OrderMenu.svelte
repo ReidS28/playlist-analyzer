@@ -3,8 +3,23 @@
 	import { slide } from "svelte/transition";
 
 	import type { OrderedTrackList } from "../../lib/orderedTrackList.svelte";
+	import {
+		ARTIST_TRAIT,
+		BLANK_TRAIT,
+		NAME_TRAIT,
+		ALBUM_TRAIT,
+		LENGTH_TRAIT,
+		DATE_ADDED_TRAIT,
+		type orderComponentObj,
+		type GroupObj,
+		type SortObj,
+		type TraitObj,
+	} from "../../lib/constants.svelte";
+
 	import OrderButton from "./OrderButton.svelte";
 	import AdvancedSortMenu from "./AdvancedSortMenu/AdvancedSortMenu.svelte";
+	import { AdvancedOrderState } from "../../lib/advancedOrderState.svelte";
+
 	interface Props {
 		tracks: OrderedTrackList;
 		navbarShrunk: boolean;
@@ -17,6 +32,14 @@
 
 	// TODO: Have this start closed
 	let menuOpen = $state(true);
+	let advancedOrderState = new AdvancedOrderState([
+		AdvancedOrderState.createItem("sort", ARTIST_TRAIT),
+		AdvancedOrderState.createItem("group", ALBUM_TRAIT),
+		AdvancedOrderState.createItem("group", NAME_TRAIT),
+		AdvancedOrderState.createItem("group", LENGTH_TRAIT),
+		AdvancedOrderState.createItem("sort", DATE_ADDED_TRAIT),
+		AdvancedOrderState.createItem("sort", NAME_TRAIT),
+	]);
 
 	$effect(() => {
 		if (scrollVelocity < -15) {
@@ -70,7 +93,9 @@
 				if (!navbarShrunk) {
 				}
 			}}
-			class="ml-auto px-3 rounded-full {tracks?.getTraitBase() == "advanced" ? "bg-sp-green" : "hover:bg-sp-green/40 bg-sp-dark-grey"}"
+			class="ml-auto px-3 rounded-full {tracks?.getTraitBase() == 'advanced'
+				? 'bg-sp-green'
+				: 'hover:bg-sp-green/40 bg-sp-dark-grey'}"
 			aria-label="Advanced Order Menu"
 		>
 			<svg
@@ -84,6 +109,6 @@
 		</button>
 	</div>
 	{#if menuOpen}
-		<AdvancedSortMenu {tracks}></AdvancedSortMenu>
+		<AdvancedSortMenu {tracks} orderState={advancedOrderState}></AdvancedSortMenu>
 	{/if}
 </div>

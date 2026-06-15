@@ -22,13 +22,15 @@
 		type TraitObj,
 	} from "../../../lib/constants.svelte";
 	import type { UUID } from "crypto";
+	import { AdvancedOrderState } from "../../../lib/advancedOrderState.svelte";
 
 	interface Props {
 		tracks: OrderedTrackList;
+		orderState: AdvancedOrderState;
 	}
-	let { tracks }: Props = $props();
+	let { tracks, orderState }: Props = $props();
 
-	const baseTraits = [
+	const displayTraits = [
 		NAME_TRAIT,
 		ARTIST_TRAIT,
 		ALBUM_TRAIT,
@@ -36,55 +38,14 @@
 		DATE_ADDED_TRAIT,
 	];
 
-	function createItem(
-		type: "group" | "sort",
-		trait: TraitObj,
-	): {
-		id: UUID;
-		type: "group" | "sort";
-		orderComponent: orderComponentObj;
-	} {
-		const isGroup = type === "group";
-		return {
-			id: crypto.randomUUID(),
-			type,
-			orderComponent: {
-				trait,
-				reversed: false,
-				...(isGroup && { groupBy: "firstLetter" as const }),
-			},
-		};
-	}
-
 	$effect(() => {
-		const advancedKey = getAdvancedOrderKey();
+		const advancedKey = orderState.getAdvancedOrderKey();
 		untrack(() => {
 			if (tracks.getTraitBase() === "advanced") {
 				tracks.order(advancedKey);
 			}
 		});
 	});
-
-	function getAdvancedOrderKey() {
-		const orderKeySegments = tracks.advancedOrder
-			.filter((item) => item.orderComponent.trait.traitKey !== undefined) // Remove blank traits
-			.map((item) => {
-				let segment = "";
-				const key =
-					item.orderComponent.trait.traitKey +
-					(item.orderComponent.reversed ? ".reversed" : "");
-
-				if (item.type === "group") {
-					segment = `group.[${key}]`;
-				} else {
-					segment = key;
-				}
-
-				return segment;
-			});
-
-		return `advanced.[${orderKeySegments.join(",")}]`;
-	}
 </script>
 
 <div
@@ -97,11 +58,11 @@
 		<div
 			class="flex flex-col gap-1 w-full h-full p-1 overflow-x-hidden overflow-y-auto scrollbar-thumb-sp-light-grey"
 		>
-			{#each tracks.advancedOrder as item (item.id)}
+			{#each orderState.order as item (item.id)}
 				<button
 					type="button"
 					animate:flip={{ duration: 200 }}
-					onclick={() => (tracks.advancedOrderActiveId = item.id)}
+					onclick={() => (orderState.activeId = item.id)}
 					class="relative w-full text-left cursor-pointer block"
 				>
 					{#if item.type === "group"}
@@ -110,7 +71,7 @@
 						<Sort bind:sort={item.orderComponent as SortObj} />
 					{/if}
 					<div
-						class="absolute inset-0 pointer-events-none rounded-sm {tracks.advancedOrderActiveId ===
+						class="absolute inset-0 pointer-events-none rounded-sm {orderState.activeId ===
 						item.id
 							? 'bg-sp-med-light-grey/26'
 							: ''}"
@@ -131,18 +92,14 @@
 				>
 					<button
 						onclick={() => {
-							tracks.addAdvancedOrderItem(
-								tracks.createAdvancedOrderItem("sort"),
-							);
+							orderState.addItem(AdvancedOrderState.createItem("sort"));
 						}}
 					>
 						Sort
 					</button>
 					<button
 						onclick={() => {
-							tracks.addAdvancedOrderItem(
-								tracks.createAdvancedOrderItem("group"),
-							);
+							orderState.addItem(AdvancedOrderState.createItem("group"));
 						}}
 					>
 						Group
@@ -154,22 +111,22 @@
 			>
 			<AdvancedSortButtonSquare
 				onclick={() => {
-					tracks.removeAdvancedOrderItem();
+					orderState.removeItemm();
 				}}>-</AdvancedSortButtonSquare
 			>
 			<AdvancedSortButtonSquare
 				onclick={() => {
-					tracks.moveAdvancedOrderItemUp();
+					orderState.moveItemUp();
 				}}>⮝</AdvancedSortButtonSquare
 			>
 			<AdvancedSortButtonSquare
 				onclick={() => {
-					tracks.moveAdvancedOrderItemDown();
+					orderState.moveItemDown();
 				}}>⮟</AdvancedSortButtonSquare
 			>
 			<AdvancedSortButtonSquare
 				onclick={() => {
-					tracks.order(getAdvancedOrderKey());
+					tracks.order(orderState.getAdvancedOrderKey());
 				}}
 				selected={tracks?.getTraitBase() === "advanced"}
 				class="ml-auto">✔</AdvancedSortButtonSquare
@@ -182,11 +139,11 @@
 			<div
 				class="flex flex-row flex-wrap *:w-fit gap-1 w-full h-fit bg-orange-500-"
 			>
-				{#each baseTraits as trait}
+				{#each displayTraits as trait}
 					<Trait
 						traitSelected={(trait) => {
 							if (trait) {
-								tracks.setAdvancedOrderItemTrait(trait);
+								orderState.setItemTrait(trait);
 							}
 						}}
 						{trait}
